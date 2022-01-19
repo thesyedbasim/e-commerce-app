@@ -11,8 +11,6 @@
 				path: `items/${itemSlug}`
 			});
 
-			console.log('data', data);
-
 			return data;
 		};
 
@@ -25,7 +23,15 @@
 </script>
 
 <script lang="ts">
+	import { addItemToCart } from '$lib/store/cartStore';
+
 	export let item;
+
+	const addItem = () => {
+		addItemToCart(item);
+	};
 </script>
 
 <h1>Item name: {item.doc.name}</h1>
+
+<button class="btn btn-primary" on:click={addItem}>add item to cart</button>
