@@ -24,22 +24,27 @@
 </script>
 
 <script lang="ts">
-	export let items;
+	import type { ItemDoc } from '$types/item';
+	import ItemCategory from '@components/item/Item.svelte';
+
+	let price = 0;
+
+	export let items: ItemDoc[];
+	$: filteredItems = items.filter((item) => (price && price > 0 ? item.doc.price <= price : true));
 </script>
 
-{#each items as item}
-	<div class="card mb-3" style="max-width: 540px;">
-		<div class="row g-0">
-			<div class="col-md-4">
-				<img src="..." class="img-fluid rounded-start" alt="..." />
+<div class="row">
+	<div class="col-4">
+		<form on:submit|preventDefault={() => {}} class="form">
+			<div class="form-group">
+				<label for="price">max price</label>
+				<input type="number" class="form-control" bind:value={price} />
 			</div>
-			<div class="col-md-8">
-				<div class="card-body">
-					<h5 class="card-title">{item.doc.name}</h5>
-					<h4>${item.doc.price}</h4>
-					<a href={`/items/${item.id}`}>Item details</a>
-				</div>
-			</div>
-		</div>
+		</form>
 	</div>
-{/each}
+	<div class="col-8">
+		{#each filteredItems as item}
+			<ItemCategory {item} />
+		{/each}
+	</div>
+</div>

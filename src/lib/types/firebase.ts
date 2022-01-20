@@ -16,3 +16,7 @@ export interface ReturnOneDoc<T> {
 	error?: IError;
 	data?: IDoc<T>;
 }
+
+export interface ReturnNoDoc {
+	error?: IError;
+}

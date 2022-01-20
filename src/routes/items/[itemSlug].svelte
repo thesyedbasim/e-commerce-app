@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import type { Load } from '@sveltejs/kit';
 	import { getOneDoc } from '$lib/firebase';
-	import type { Item } from '$lib/types/item';
+	import type { Item, ItemCart } from '$lib/types/item';
 
 	export const load: Load = async ({ params }) => {
 		const { itemSlug } = params;
@@ -23,15 +23,21 @@
 </script>
 
 <script lang="ts">
-	import { addItemToCart } from '$lib/store/cartStore';
+	import { addItemToCart } from '$store/cartStore';
+	import type { ItemDoc } from '$types/item';
 
-	export let item;
+	let qty: number = 1;
+	export let item: ItemDoc;
+	$: itemCart = { id: item.id, doc: { ...item.doc }, quantity: qty } as ItemCart;
 
 	const addItem = () => {
-		addItemToCart(item);
+		addItemToCart(itemCart);
 	};
 </script>
 
 <h1>Item name: {item.doc.name}</h1>
 
-<button class="btn btn-primary" on:click={addItem}>add item to cart</button>
+<label for="qty" />
+<input type="number" id="qty" bind:value={qty} />
+
+<button class="btn btn-primary" on:click={addItem} disabled={qty < 1}>add item to cart</button>

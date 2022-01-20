@@ -13,8 +13,6 @@
 
 		const categories = await getCategoryData();
 
-		console.log('categories', categories);
-
 		return { props: { categories } };
 	};
 </script>

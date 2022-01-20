@@ -1,17 +1,59 @@
 import { derived, writable } from 'svelte/store';
-import type { IDoc } from '$lib/types/firebase';
-import type { Item } from '$lib/types/item';
+import type { Item, ItemCart } from '$types/item';
+import { setOneDoc } from '$lib/firebase';
 
-const itemsInCart = writable<IDoc<Item>[]>([]);
-export const addItemToCart = (item: IDoc<Item>): void => {
-	itemsInCart.update((items) => [...items, item]);
+const itemsInCart = writable<ItemCart[]>([]);
+export const addItemToCart = async (item: ItemCart): Promise<void> => {
+	const dbAddItemToCart = async (item: ItemCart) => {
+		const itemToSet: { itemId: string; quantity: number; itemDetails: Item } = {
+			itemId: item.id,
+			quantity: item.quantity,
+			itemDetails: { ...item.doc }
+		};
+
+		return await setOneDoc({
+			path: 'cart',
+			data: item,
+			options: { shouldMerge: true }
+		});
+	};
+
+	const storeAddItemToCart = (): ItemCart | undefined => {
+		let itemWhichExists: ItemCart;
+
+		itemsInCart.update((items) => {
+			const itemIndex = items.findIndex((itemSearch) => itemSearch.id === item.id);
+			itemWhichExists = items[itemIndex];
+
+			if (itemIndex >= 0) {
+				itemWhichExists.quantity += 1;
+
+				return items;
+			}
+
+			return [...items, item];
+		});
+
+		return itemWhichExists;
+	};
+
+	const itemWhichExists = storeAddItemToCart();
+	const { error } = await dbAddItemToCart(itemWhichExists || item);
 };
 export const subscribeItemsInCart = itemsInCart.subscribe;
 export const removeItemFromCart = (itemId: string): void => {
 	itemsInCart.update((items) => items.filter((item) => item.id !== itemId));
 };
 
-const numOfItemsInCart = derived(itemsInCart, (allItemsInCart) => allItemsInCart.length);
+const numOfItemsInCart = derived(itemsInCart, (allItemsInCart) =>
+	allItemsInCart.reduce((total, currentItem) => total + currentItem.quantity, 0)
+);
 export const subscribeNumOfItemsInCart = numOfItemsInCart.subscribe;
 
-// const totalPriceOfItemsInCart = derived(itemsInCart, (allItemsInCart) => allItemsInCart.reduce((prevItemIndex, itemIndex, items) => items[prevItemIndex], 0))
+const totalPriceInCart = derived(itemsInCart, (allItemsInCart) =>
+	allItemsInCart.reduce(
+		(total, currentItem) => total + currentItem.doc.price * currentItem.quantity,
+		0
+	)
+);
+export const subscribeTotalPriceInCart = totalPriceInCart.subscribe;
