@@ -23,8 +23,17 @@
 		"allowJs": true,
 		"checkJs": true,
 		"paths": {
+			"$store": ["src/lib/store"],
+			"$store/*": ["src/lib/store/*"],
+			"$types": ["src/lib/types/*"],
+			"$types/*": ["src/lib/types/*"],
+			"$utils": ["src/lib/utils/*"],
+			"$utils/*": ["src/lib/utils/*"],
 			"$lib": ["src/lib"],
-			"$lib/*": ["src/lib/*"]
+			"$lib/*": ["src/lib/*"],
+
+			"@components": ["src/components"],
+			"@components/*": ["src/components/*"]
 		}
 	},
 	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]
