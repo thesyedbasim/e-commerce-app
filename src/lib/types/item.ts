@@ -4,6 +4,7 @@ export interface Item {
 	name: string;
 	price: number;
 	category: any;
+	itemsInStock: number;
 }
 
 export type ItemDoc = IDoc<Item>;

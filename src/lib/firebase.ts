@@ -82,7 +82,7 @@ export const addOneDoc = async <T>({
 	try {
 		await addDoc(collection(firestore, path), data);
 	} catch (err) {
-		returnObject.error.message = err.message;
+		returnObject.error.message = err?.message || 'There was some problem.';
 	}
 
 	return returnObject;
@@ -101,7 +101,7 @@ export const setOneDoc = async <T>({
 		shouldMerge?: boolean;
 	};
 }): Promise<ReturnNoDoc> => {
-	const returnObject: ReturnNoDoc = { error: null };
+	const returnObject: ReturnNoDoc = { error: { message: null } };
 
 	try {
 		if (options) {
@@ -110,7 +110,7 @@ export const setOneDoc = async <T>({
 			await setDoc(doc(firestore, path, id), data);
 		}
 	} catch (err) {
-		returnObject.error.message = err.message;
+		returnObject.error.message = err?.message || 'There was some problem.';
 	}
 
 	return returnObject;

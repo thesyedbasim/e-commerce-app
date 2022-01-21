@@ -35,9 +35,12 @@
 	};
 </script>
 
-<h1>Item name: {item.doc.name}</h1>
+<h1>{item.doc.name}</h1>
+<h3>${item.doc.price}</h3>
 
 <label for="qty" />
 <input type="number" id="qty" bind:value={qty} />
 
-<button class="btn btn-primary" on:click={addItem} disabled={qty < 1}>add item to cart</button>
+<button class="btn btn-primary" on:click={addItem} disabled={qty < 1 || qty > item.doc.itemsInStock}
+	>add item to cart</button
+>
