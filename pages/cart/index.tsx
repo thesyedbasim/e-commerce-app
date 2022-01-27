@@ -1,4 +1,5 @@
 import type { GetServerSideProps, NextPage } from 'next';
+import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
 	getAllCartItems,
@@ -20,6 +21,9 @@ const Cart: NextPage = () => {
 	return (
 		<>
 			<h3>Total price: ${totalCartPrice}</h3>
+			<Link href="/checkout">
+				<button className="btn btn-primary">Checkout</button>
+			</Link>
 			{cartItems.map((cartItem) => (
 				<div
 					key={cartItem.id || Date.toString()}
