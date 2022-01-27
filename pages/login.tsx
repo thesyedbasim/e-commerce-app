@@ -1,3 +1,5 @@
+import { User } from '@supabase/supabase-js';
+import axios from 'axios';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -5,9 +7,18 @@ import { supabase } from '../lib/supabase';
 
 const Login: NextPage = () => {
 	const router = useRouter();
+	const [user, setUser] = useState<User | null>(supabase.auth.user());
+
+	supabase.auth.onAuthStateChange((event) => {
+		setUser(supabase.auth.user());
+
+		axios.post('/api/set-supabase-cookie', {
+			event,
+			session: supabase.auth.session()
+		});
+	});
 
 	useEffect(() => {
-		const user = supabase.auth.user();
 		if (user) router.replace('/');
 	}, []);
 
