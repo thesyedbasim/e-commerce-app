@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
 	getAllCartItems,
+	getNumOfItemsInCart,
 	getTotalCartPrice,
 	removeItemFromCart
 } from '../../app/store/cartSlice';
@@ -16,14 +17,17 @@ const Cart: NextPage = () => {
 	const dispatch = useAppDispatch();
 
 	const cartItems = useAppSelector(getAllCartItems);
+	const numOfItemsInCart = useAppSelector(getNumOfItemsInCart);
 	const totalCartPrice = useAppSelector(getTotalCartPrice);
 
 	return (
 		<>
 			<h3>Total price: ${totalCartPrice}</h3>
-			<Link href="/checkout">
-				<button className="btn btn-primary">Checkout</button>
-			</Link>
+			{numOfItemsInCart > 0 && (
+				<Link href="/checkout">
+					<button className="btn btn-primary">Checkout</button>
+				</Link>
+			)}
 			{cartItems.map((cartItem) => (
 				<div
 					key={cartItem.id || Date.toString()}
