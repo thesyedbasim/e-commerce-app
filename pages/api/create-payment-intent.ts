@@ -12,23 +12,20 @@ const CreatePaymentIntent = async (
 	req: NextApiRequest,
 	res: NextApiResponse
 ) => {
-	const getCartTotalPrice = async () => {
-		const { user } = await supabase.auth.api.getUserByCookie(req);
+	const supabaseService = getServiceSupabase();
+	const user: User['id'] = req.headers.userid as User['id'];
 
+	const getCartTotalPrice = async () => {
 		if (!user) {
-			res.status(401).send('Please authenticate before checkout.');
+			res.status(401).json({ message: 'Please authenticate before checkout.' });
 
 			return;
 		}
 
-		console.log('cookie user', user);
-
-		const supabaseService = getServiceSupabase();
-
 		const { data, error } = await supabaseService
 			.from('cart')
 			.select('*, products!inner(price)')
-			.eq('user_id', user?.id);
+			.eq('user_id', user);
 
 		if (!data || data.length === 0) return null;
 
@@ -46,21 +43,30 @@ const CreatePaymentIntent = async (
 	let totalPrice: number;
 
 	if (!data) {
-		res.status(400).send('No items in cart');
+		res.status(400).json({ message: 'No items in cart' });
+
 		return;
 	}
 
 	totalPrice = getTotalPrice(data) * 100;
 
-	console.log('totalPrice', totalPrice);
+	try {
+		const paymentIntent = await stripe.paymentIntents.create({
+			currency: 'USD',
+			amount: totalPrice,
+			automatic_payment_methods: { enabled: true }
+		});
 
-	const paymentIntent = await stripe.paymentIntents.create({
-		currency: 'USD',
-		amount: totalPrice,
-		automatic_payment_methods: { enabled: true }
-	});
+		res.json({ clientSecret: paymentIntent.client_secret });
+	} catch (err) {
+		console.error('error while creating payment intent', err);
 
-	res.json({ clientSecret: paymentIntent.client_secret });
+		res.status(400).json({ message: 'Unable to create payment intent.' });
+
+		return;
+	}
+
+	return;
 };
 
 export default CreatePaymentIntent;

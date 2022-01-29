@@ -5,6 +5,7 @@ import { Product } from '../../lib/types/product';
 import { supabase } from '../../lib/supabase';
 import { useAppDispatch } from '../../app/hooks';
 import { addItemToCart } from '../../app/store/cartSlice';
+import { Cart, CartDB } from '../../lib/types/cart';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const id = params!.id;
@@ -27,10 +28,23 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 const ProductPage: NextPage<{ product: Product }> = ({ product }) => {
 	const [qty, setQty] = useState<number>(1);
 
+	const [error, setError] = useState<string>('');
+
 	const dispatch = useAppDispatch();
 
-	const addToCart = () => {
-		dispatch(addItemToCart({ quantity: qty, product }));
+	const addToCart = async () => {
+		const { data, error: sbError } = await supabase
+			.from<CartDB>('cart')
+			.insert({ product_id: product.id, quantity: qty })
+			.single();
+
+		if (sbError) {
+			setError(sbError.message);
+
+			return;
+		}
+
+		dispatch(addItemToCart({ id: data.id, product, quantity: qty }));
 	};
 
 	return (
