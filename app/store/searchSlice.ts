@@ -26,4 +26,4 @@ export const getAllSearchItems = (state: RootState) => {
 	return state.search.items;
 };
 
-export default searchSlice.reducer;
+export const searchReducer = searchSlice.reducer;

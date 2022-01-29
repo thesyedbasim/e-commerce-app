@@ -1,17 +1,15 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type { NextPage } from 'next';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
 	getAllCartItems,
 	getNumOfItemsInCart,
 	getTotalCartPrice,
-	removeItemFromCart
+	removeItemFromCart,
+	setCartItems
 } from '../../app/store/cartSlice';
-
-//export const getServerSideProps: GetServerSideProps = async () => {
-
-//return {}
-//}
+import { supabase } from '../../lib/supabase';
 
 const Cart: NextPage = () => {
 	const dispatch = useAppDispatch();
@@ -20,13 +18,82 @@ const Cart: NextPage = () => {
 	const numOfItemsInCart = useAppSelector(getNumOfItemsInCart);
 	const totalCartPrice = useAppSelector(getTotalCartPrice);
 
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
+
+	let user = supabase.auth.user();
+
+	const fetchAndSetCartItems = async () => {
+		if (!user) return;
+
+		setIsLoading(true);
+
+		const { data, error: sbError } = await supabase
+			.from('cart')
+			.select('*, product: products (id, name, price)')
+			.eq('user_id', user.id);
+
+		setIsLoading(false);
+
+		if (sbError) {
+			setError('There was some error fetching cart items.');
+
+			return;
+		}
+
+		dispatch(setCartItems(data));
+	};
+
+	const deleteCartItems = async (cartItemId: number) => {
+		if (!user) return;
+
+		const { error: sbError } = await supabase
+			.from('cart')
+			.delete({ returning: 'minimal' })
+			.eq('id', cartItemId)
+			.eq('user_id', user.id);
+
+		if (sbError) {
+			setError('There was some problem removing that item from cart.');
+
+			return;
+		}
+
+		dispatch(removeItemFromCart({ cartItemId }));
+	};
+
+	useEffect(() => {
+		fetchAndSetCartItems();
+	}, []);
+
+	supabase.auth.onAuthStateChange((event) => {
+		if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+			dispatch(setCartItems([]));
+
+			return;
+		}
+
+		fetchAndSetCartItems();
+	});
+
+	if (error) {
+		return <h1>Oops! There was an error fetching your cart.</h1>;
+	}
+
+	if (isLoading) {
+		return <h3>Loading...</h3>;
+	}
+
 	return (
 		<>
-			<h3>Total price: ${totalCartPrice}</h3>
+			{!numOfItemsInCart && <h3>There are no items in your cart.</h3>}
 			{numOfItemsInCart > 0 && (
-				<Link href="/checkout">
-					<button className="btn btn-primary">Checkout</button>
-				</Link>
+				<>
+					<h3>Total price: ${totalCartPrice}</h3>
+					<Link href="/checkout">
+						<button className="btn btn-primary">Checkout</button>
+					</Link>
+				</>
 			)}
 			{cartItems.map((cartItem) => (
 				<div
@@ -47,9 +114,7 @@ const Cart: NextPage = () => {
 								<p className="card-text">quantity: {cartItem.quantity}</p>
 								<button
 									className="btn btn-danger"
-									onClick={() =>
-										dispatch(removeItemFromCart({ cartItemId: cartItem.id! }))
-									}
+									onClick={() => deleteCartItems(cartItem.id)}
 								>
 									Remove from cart
 								</button>
