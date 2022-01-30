@@ -30,11 +30,9 @@ const CheckoutPage: NextPage = () => {
 		axios
 			.post('/api/create-payment-intent', {}, { headers: { userId } })
 			.then((res) => {
-				console.log(res.data);
 				setClientSecret(res.data.clientSecret);
 			})
 			.catch((err: AxiosError) => {
-				console.log('the error', { ...err });
 				console.error(err);
 				setError(
 					err.response?.data.message ||

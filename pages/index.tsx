@@ -17,7 +17,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
 	};
 
 	const data = await getCategoryData();
-	console.log(data);
 
 	if (!data)
 		return {

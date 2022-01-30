@@ -35,7 +35,9 @@ const Login: NextPage = () => {
 	const loginUser = async () => {
 		if (!isFormValid) return;
 
-		const { user } = await supabase.auth.signIn({ email, password });
+		const { user, error } = await supabase.auth.signIn({ email, password });
+
+		if (error) console.error('the error while logging in', error);
 
 		if (user) router.replace('/cart');
 	};

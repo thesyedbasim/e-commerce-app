@@ -40,6 +40,7 @@ const ProductPage: NextPage<{ product: Product }> = ({ product }) => {
 
 		if (sbError) {
 			setError(sbError.message);
+			console.error('the error while adding item to cart', sbError);
 
 			return;
 		}

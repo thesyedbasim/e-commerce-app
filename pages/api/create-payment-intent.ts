@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import { User } from '@supabase/supabase-js';
 import { supabase, getServiceSupabase } from '../../lib/supabase';
-import { ProductMinimal } from '../../lib/types/product';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 	apiVersion: '2020-08-27'
@@ -13,19 +12,33 @@ const CreatePaymentIntent = async (
 	res: NextApiResponse
 ) => {
 	const supabaseService = getServiceSupabase();
-	const user: User['id'] = req.headers.userid as User['id'];
+	const userId: User['id'] = req.headers.userid as User['id'];
+
+	if (!userId) {
+		res.status(401).json({ message: 'Please authenticate before checkout.' });
+
+		return;
+	}
+
+	const { data: user } = await supabaseService.auth.api.getUserById(userId);
+
+	if (!user) {
+		res.status(406).json({ message: 'User not found with the id specified.' });
+
+		return;
+	}
+
+	const { data: userProfile } = await supabaseService
+		.from('profiles')
+		.select('stripe_customer')
+		.eq('id', user.id)
+		.single();
 
 	const getCartTotalPrice = async () => {
-		if (!user) {
-			res.status(401).json({ message: 'Please authenticate before checkout.' });
-
-			return;
-		}
-
 		const { data, error } = await supabaseService
 			.from('cart')
 			.select('*, products!inner(price)')
-			.eq('user_id', user);
+			.eq('user_id', user.id);
 
 		if (!data || data.length === 0) return null;
 
@@ -54,7 +67,8 @@ const CreatePaymentIntent = async (
 		const paymentIntent = await stripe.paymentIntents.create({
 			currency: 'USD',
 			amount: totalPrice,
-			automatic_payment_methods: { enabled: true }
+			automatic_payment_methods: { enabled: true },
+			customer: userProfile.stripe_customer
 		});
 
 		res.json({ clientSecret: paymentIntent.client_secret });
