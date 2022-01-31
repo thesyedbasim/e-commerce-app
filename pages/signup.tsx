@@ -3,7 +3,7 @@ import axios from 'axios';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '$lib/supabase';
 
 const Signup: NextPage = () => {
 	const router = useRouter();

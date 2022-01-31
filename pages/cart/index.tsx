@@ -8,8 +8,8 @@ import {
 	getTotalCartPrice,
 	removeItemFromCart,
 	setCartItems
-} from '../../app/store/cartSlice';
-import { supabase } from '../../lib/supabase';
+} from '../../store/cartSlice';
+import { supabase } from '$lib/supabase';
 
 const Cart: NextPage = () => {
 	const dispatch = useAppDispatch();

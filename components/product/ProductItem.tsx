@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ProductMinimal } from '../../lib/types/product';
+import { ProductMinimal } from '$types/product';
 
 const ProductItem: React.FC<{ product: ProductMinimal }> = ({ product }) => {
 	return (

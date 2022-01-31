@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import type { NextPage } from 'next';
-import { supabase } from '../../lib/supabase';
-import type { ProductMinimal } from '../../lib/types/product';
+import { supabase } from '$lib/supabase';
+import type { ProductMinimal } from '$types/product';
 import ProductItem from '../../components/product/ProductItem';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {

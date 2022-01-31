@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PostgrestError } from '@supabase/supabase-js';
 import { RootState } from '.';
-import { supabase } from '../../lib/supabase';
-import { Cart } from '../../lib/types/cart';
-import { ProductMinimal } from '../../lib/types/product';
+import { supabase } from '$lib/supabase';
+import { Cart } from '$types/cart';
+import { ProductMinimal } from '$types/product';
 
 interface InitialState {
 	error?: string;

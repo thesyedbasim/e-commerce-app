@@ -21,7 +21,8 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-redux": "^7.2.6",
-    "stripe": "^8.200.0"
+    "stripe": "^8.200.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",

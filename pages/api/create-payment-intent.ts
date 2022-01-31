@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import { User } from '@supabase/supabase-js';
-import { supabase, getServiceSupabase } from '../../lib/supabase';
+import { supabase, getServiceSupabase } from '$lib/supabase';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 	apiVersion: '2020-08-27'

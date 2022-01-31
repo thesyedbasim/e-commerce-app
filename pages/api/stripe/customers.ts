@@ -1,25 +1,54 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getServiceSupabase } from '../../../lib/supabase';
-import Stripe from 'stripe';
+import { getServiceSupabase } from '$lib/supabase';
+import { User } from '$lib/types/user';
+import { stripe } from '$lib/stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-	apiVersion: '2020-08-27'
-});
+const supabaseService = getServiceSupabase();
 
+export const createCustomer = async (userProfile: User) => {
+	const { uid, name, email } = userProfile;
+
+	const customer = await stripe.customers.create(
+		{ name: name || email, email, metadata: { userProfile: uid } },
+		{ idempotencyKey: uid }
+	);
+
+	return customer;
+};
+
+const updateUserCustomer = async (
+	uid: User['uid'],
+	customerId: User['stripeCustomer']
+) => {
+	const { error } = await supabaseService
+		.from('users')
+		.update({ stripeCustomer: customerId }, { returning: 'minimal' })
+		.eq('uid', uid);
+
+	if (error) throw error;
+};
+
+export const getUser = async (uid: User['uid']) => {
+	const { data, error } = await supabaseService
+		.from('users')
+		.select('*')
+		.eq('uid', uid)
+		.single();
+
+	if (error) throw error;
+
+	return data as User;
+};
+
+// ENDPOINT HANDLER
 const Customers = async (req: NextApiRequest, res: NextApiResponse) => {
-	console.log('customer endpoint recieved.');
-
 	if (req.method !== 'POST') {
 		res.status(405).json({ message: 'This http method is not supported.' });
 
 		return;
 	}
 
-	console.log('its post request');
-
-	const dbRecord = req.body.record;
-
-	const userId = dbRecord.id;
+	const { uid: userId } = req.body.record;
 
 	if (!userId) {
 		res.status(401).json({ message: 'Please authenticate.' });
@@ -29,53 +58,35 @@ const Customers = async (req: NextApiRequest, res: NextApiResponse) => {
 
 	console.log('user id exists', userId);
 
-	const supabase = getServiceSupabase();
-
-	const { data: user, error: userByIdError } =
-		await supabase.auth.api.getUserById(userId as string);
-
-	if (userByIdError) console.error('getting user by id error', userByIdError);
+	const user = await getUser(userId);
 
 	if (!user) {
-		res.status(406).json({ message: 'No profile found for this user.' });
-
-		return;
+		return res.status(406).json({ message: 'No user found for the user.' });
 	}
 
 	console.log('user exists in supabase');
 
-	let customer: Stripe.Response<Stripe.Customer>;
-
+	let customer;
 	try {
-		customer = await stripe.customers.create({
-			email: dbRecord.email
-		});
+		customer = await createCustomer(user);
 
-		console.log('customer created');
-		console.log(customer);
+		console.log('customer created', customer);
 	} catch (err) {
 		console.error('error creating customer', err);
 
-		res
+		return res
 			.status(500)
-			.json({ message: 'There was some problem creating a stripe customer' });
-
-		return;
+			.json({ message: 'There was some problem creating the stripe customer' });
 	}
 
-	const { error } = await supabase
-		.from('profiles')
-		.update({ stripe_customer: customer.id }, { returning: 'minimal' })
-		.eq('id', dbRecord.id);
+	try {
+		await updateUserCustomer(user.uid, customer.id);
+	} catch (err) {
+		console.error('the error for adding stripe id to supabase', err);
 
-	if (error) {
-		console.error('the error for adding stripe id to supabase', error);
-
-		res.status(500).json({
+		return res.status(500).json({
 			message: 'There was some error adding stripe customer id to database'
 		});
-
-		return;
 	}
 
 	res.status(201).json({ message: 'Customer created successfully' });

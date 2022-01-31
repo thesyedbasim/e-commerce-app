@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getAuthUser, setAuthUser } from '../../app/store/authSlice';
-import { getNumOfItemsInCart } from '../../app/store/cartSlice';
-import { supabase } from '../../lib/supabase';
+import { getAuthUser, setAuthUser } from '../../store/authSlice';
+import { getNumOfItemsInCart } from '../../store/cartSlice';
+import { supabase } from '$lib/supabase';
 import Search from '../misc/Search';
 
 const Navbar: React.FC = () => {
@@ -39,11 +39,18 @@ const Navbar: React.FC = () => {
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 						{authUser ? (
-							<li className="nav-item">
-								<button onClick={signOut} className="btn nav-link">
-									Sign out
-								</button>
-							</li>
+							<>
+								<li className="nav-item">
+									<button onClick={signOut} className="btn nav-link">
+										Sign out
+									</button>
+								</li>
+								<li className="nav-item">
+									<Link href="/account/orders">
+										<a className="nav-link">My orders</a>
+									</Link>
+								</li>
+							</>
 						) : (
 							<>
 								<li className="nav-item">
@@ -59,9 +66,11 @@ const Navbar: React.FC = () => {
 							</>
 						)}
 					</ul>
-					<Link href="/cart">
-						<a className="nav-link">cart: {numOfItemsInCart}</a>
-					</Link>
+					{authUser && (
+						<Link href="/cart">
+							<a className="nav-link">cart: {numOfItemsInCart}</a>
+						</Link>
+					)}
 					<Search />
 				</div>
 			</div>

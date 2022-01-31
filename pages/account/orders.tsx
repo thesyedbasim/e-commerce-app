@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getAllOrders, setOrders } from '../../app/store/orderSlice';
-import { supabase } from '../../lib/supabase';
-import { Order } from '../../lib/types/order';
+import { getAllOrders, setOrders } from '../../store/orderSlice';
+import { supabase } from '$lib/supabase';
+import { Order } from '$types/order';
 
 const OrdersPage: NextPage = () => {
 	const user = supabase.auth.user();

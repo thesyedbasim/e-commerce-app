@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '$lib/supabase';
 import { useAppDispatch } from '../../app/hooks';
-import { setSearchItems } from '../../app/store/searchSlice';
-import { ProductMinimal } from '../../lib/types/product';
+import { setSearchItems } from '$store/searchSlice';
+import { ProductMinimal } from '$types/product';
 
 const Search: React.FC = () => {
 	const router = useRouter();

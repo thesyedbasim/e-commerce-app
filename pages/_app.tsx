@@ -2,10 +2,10 @@ import '../styles/globals.scss';
 import type { AppProps } from 'next/app';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Provider } from 'react-redux';
-import { store } from '../app/store';
+import { store } from '../store';
 import NavBar from '../components/nav/Navbar';
-import { supabase } from '../lib/supabase';
-import { setAuthUser } from '../app/store/authSlice';
+import { supabase } from '$lib/supabase';
+import { setAuthUser } from '../store/authSlice';
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
 

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '@supabase/supabase-js';
 import { RootState } from '.';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '$lib/supabase';
 
 interface InitialState {
 	user: User | null;
