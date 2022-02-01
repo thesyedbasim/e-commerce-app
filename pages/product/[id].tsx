@@ -1,11 +1,11 @@
 import { GetServerSideProps } from 'next';
 import type { NextPage } from 'next';
 import { useState } from 'react';
-import { Product } from '$types/product';
+//import { Product } from '$types/product';
 import { supabase } from '$lib/supabase';
 import { useAppDispatch } from '../../app/hooks';
 import { addItemToCart } from '../../store/cartSlice';
-import { Cart, CartDB } from '$types/cart';
+//import { Cart, CartDB } from '$types/cart';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const id = params!.id;
@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	};
 };
 
-const ProductPage: NextPage<{ product: Product }> = ({ product }) => {
+const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 	const [qty, setQty] = useState<number>(1);
 
 	const [error, setError] = useState<string>('');
@@ -34,8 +34,8 @@ const ProductPage: NextPage<{ product: Product }> = ({ product }) => {
 
 	const addToCart = async () => {
 		const { data, error: sbError } = await supabase
-			.from<CartDB>('cart')
-			.insert({ product_id: product.id, quantity: qty })
+			.from('cart')
+			.insert({ product: product.id, quantity: qty })
 			.single();
 
 		if (sbError) {

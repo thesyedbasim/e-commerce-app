@@ -30,12 +30,13 @@ const Cart: NextPage = () => {
 
 		const { data, error: sbError } = await supabase
 			.from('cart')
-			.select('*, product: products (id, name, price)')
-			.eq('user_id', user.id);
+			.select('*, product (id, name, price)')
+			.eq('user', user.id);
 
 		setIsLoading(false);
 
 		if (sbError) {
+			console.error('error while reading cart', sbError);
 			setError('There was some error fetching cart items.');
 
 			return;
@@ -51,7 +52,7 @@ const Cart: NextPage = () => {
 			.from('cart')
 			.delete({ returning: 'minimal' })
 			.eq('id', cartItemId)
-			.eq('user_id', user.id);
+			.eq('user', user.id);
 
 		if (sbError) {
 			setError('There was some problem removing that item from cart.');

@@ -19,16 +19,20 @@ const CheckoutPage: NextPage = () => {
 	const [error, setError] = useState<string>('');
 
 	useEffect(() => {
-		const userId = supabase.auth.user()?.id;
+		const userUid = supabase.auth.user()?.id;
 
-		if (!userId) {
+		if (!userUid) {
 			router.replace('/');
 
 			return;
 		}
 
 		axios
-			.post('/api/create-payment-intent', {}, { headers: { userId } })
+			.post(
+				'/api/stripe/payment-intents',
+				{},
+				{ headers: { userUid, orderMethod: 'CART' } }
+			)
 			.then((res) => {
 				setClientSecret(res.data.clientSecret);
 			})

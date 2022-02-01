@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import { buffer } from 'micro';
 import axios from 'axios';
+import { createOrder } from './orders';
 
 export const config = { api: { bodyParser: false } };
 
@@ -11,19 +12,17 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const StripeWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
 	const stripeWebookSigningSecret = process.env.STRIPE_WEBHOOK_SIGNING_SECRET!;
+	const stripeSignature = req.headers['stripe-signature'] as string;
+
+	const reqBuffer = await buffer(req);
 
 	let event;
-
-	const bodyBuf = await buffer(req);
-
 	try {
 		event = stripe.webhooks.constructEvent(
-			bodyBuf,
-			req.headers['stripe-signature']!,
+			reqBuffer,
+			stripeSignature,
 			stripeWebookSigningSecret
 		);
-
-		console.log('stripe event inside try', event);
 	} catch (err) {
 		console.error('⚠ Stripe webhook validation failed.', err);
 
@@ -35,19 +34,21 @@ const StripeWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 
 	switch (event.type) {
-		case 'payment_intent.created':
-			// try {
-			// 	await axios.post('')
-			// } catch(err) {
-			// 	console.error('⚠ Error while creating order.')
-			// }
+		case 'payment_intent.succeeded':
+			const dataObj = event.data.object as any;
 
-			console.log('payment intent created.');
+			await createOrder({
+				amount: dataObj.amount / 100,
+				products: JSON.parse(dataObj.metadata.products),
+				userUid: dataObj.metadata.userUid
+			});
 
-			console.log('THE EVENT OBJECT IS:');
-			console.log(event);
+			break;
 		case 'payment_intent.payment_failed':
 			console.log('payment intent fail');
+			console.log(event);
+
+			break;
 		default:
 			console.log(`unhandled event type: ${event.type}`);
 	}
