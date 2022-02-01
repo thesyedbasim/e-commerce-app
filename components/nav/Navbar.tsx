@@ -15,10 +15,6 @@ const Navbar: React.FC = () => {
 		dispatch(setAuthUser(supabase.auth.user()))
 	);
 
-	const signOut = () => {
-		supabase.auth.signOut();
-	};
-
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
 			<div className="container-fluid">
@@ -41,9 +37,9 @@ const Navbar: React.FC = () => {
 						{authUser ? (
 							<>
 								<li className="nav-item">
-									<button onClick={signOut} className="btn nav-link">
-										Sign out
-									</button>
+									<Link href="/signout">
+										<a className="btn nav-link">Sign out</a>
+									</Link>
 								</li>
 								<li className="nav-item">
 									<Link href="/orders">
