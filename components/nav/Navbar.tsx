@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
 							<>
 								<li className="nav-item">
 									<Link href="/signout">
-										<a className="btn nav-link">Sign out</a>
+										<a className="nav-link">Sign out</a>
 									</Link>
 								</li>
 								<li className="nav-item">

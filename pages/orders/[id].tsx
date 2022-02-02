@@ -1,4 +1,5 @@
 import { supabase } from '$lib/supabase';
+import { ProductMinimal } from '$lib/types/product';
 import ProductItem from 'components/product/ProductItem';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -11,7 +12,7 @@ const OrderDetails: NextPage = () => {
 
 	const user = supabase.auth.user();
 
-	const [products, setProducts] = useState<any[]>();
+	const [products, setProducts] = useState<ProductMinimal[]>();
 
 	useEffect(() => {
 		(async () => {

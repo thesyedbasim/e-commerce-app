@@ -17,7 +17,6 @@
 		"baseUrl": ".",
 		"paths": {
 			"$lib/*": ["lib/*"],
-			"$types/*": ["types/*"],
 			"$store/*": ["store/*"],
 
 			"@components": ["components"]

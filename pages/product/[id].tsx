@@ -1,11 +1,11 @@
 import { GetServerSideProps } from 'next';
 import type { NextPage } from 'next';
 import { useState } from 'react';
-//import { Product } from '$types/product';
+//import { Product } from '$lib/typesproduct';
 import { supabase } from '$lib/supabase';
 import { useAppDispatch } from '../../app/hooks';
 import { addItemToCart } from '../../store/cartSlice';
-//import { Cart, CartDB } from '$types/cart';
+//import { Cart, CartDB } from '$lib/typescart';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const id = params!.id;

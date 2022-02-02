@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getAllOrders, setOrders } from '../../store/orderSlice';
 import { supabase } from '$lib/supabase';
-import { Order } from '$types/order';
+import { Order } from '$lib/types/order';
 import Link from 'next/link';
 
 const OrdersPage: NextPage = () => {

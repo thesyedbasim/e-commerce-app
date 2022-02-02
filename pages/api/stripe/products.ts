@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Stripe from 'stripe';
-import { stripe } from '$lib/stripe';
+import { initStripe } from '$lib/stripe';
 import { getServiceSupabase } from '$lib/supabase';
 
+const stripe = initStripe();
 const supabaseService = getServiceSupabase();
 
 const createStripeProduct = async ({

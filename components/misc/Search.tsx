@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { supabase } from '$lib/supabase';
 import { useAppDispatch } from '../../app/hooks';
 import { setSearchItems } from '$store/searchSlice';
-import { ProductMinimal } from '$types/product';
+import { ProductMinimal } from '$lib/typesproduct';
 
 const Search: React.FC = () => {
 	const router = useRouter();

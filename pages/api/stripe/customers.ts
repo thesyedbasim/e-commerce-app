@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServiceSupabase } from '$lib/supabase';
 import { User } from '$lib/types/user';
-import { stripe } from '$lib/stripe';
+import { initStripe } from '$lib/stripe';
 
+const stripe = initStripe();
 const supabaseService = getServiceSupabase();
 
 export const createCustomer = async (userProfile: User) => {

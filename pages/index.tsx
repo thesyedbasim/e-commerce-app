@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { supabase } from '$lib/supabase';
-import { Category } from '$types/category';
+import { Category } from '$lib/typescategory';
 
 export const getServerSideProps: GetServerSideProps = async () => {
 	const getCategoryData = async () => {
