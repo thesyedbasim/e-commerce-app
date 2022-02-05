@@ -51,6 +51,7 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 	return (
 		<>
 			<h1>{product.name}</h1>
+			<p>{product.description}</p>
 			<h3>${product.price}</h3>
 
 			<label htmlFor="qty">Quantity</label>
