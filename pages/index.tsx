@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { supabase } from '$lib/supabase';
-import { Category } from '$lib/typescategory';
+import { Category } from '$lib/types/category';
 
 export const getServerSideProps: GetServerSideProps = async () => {
 	const getCategoryData = async () => {
@@ -33,11 +33,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
 const Home: NextPage<{ categories: Category[] }> = ({ categories }) => {
 	return (
 		<>
-			<h1>Welcome to amazon clone</h1>
-			<div className="row row-cols-1 row-cols-md-2 g-4">
-				<div className="col">
-					{categories.map((category) => (
-						<div className="card" key={category.id}>
+			<h1 className="mb-5">Welcome to amazon clone</h1>
+			<div className="row row-cols-1 row-cols-md-4 g-4">
+				{categories.map((category) => (
+					<div className="col" key={category.id}>
+						<div className="card">
 							<img src="..." className="card-img-top" alt="..." />
 							<div className="card-body">
 								<h5 className="card-title">{category.name}</h5>
@@ -47,8 +47,8 @@ const Home: NextPage<{ categories: Category[] }> = ({ categories }) => {
 								</Link>
 							</div>
 						</div>
-					))}
-				</div>
+					</div>
+				))}
 			</div>
 		</>
 	);

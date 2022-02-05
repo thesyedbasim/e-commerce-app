@@ -22,9 +22,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 const Category: NextPage<{ products: ProductMinimal[] }> = ({ products }) => {
 	return (
 		<>
-			{products.map((product) => (
-				<ProductItem key={product.id} product={product} />
-			))}
+			<div className="row">
+				<div className="col-3"></div>
+				<div className="col-9">
+					{products.map((product) => (
+						<ProductItem key={product.id} product={product} />
+					))}
+				</div>
+			</div>
 		</>
 	);
 };

@@ -10,6 +10,7 @@ import {
 	setCartItems
 } from '../../store/cartSlice';
 import { supabase } from '$lib/supabase';
+import { ProductMinimal } from '$lib/types/product';
 
 const Cart: NextPage = () => {
 	const dispatch = useAppDispatch();
@@ -22,6 +23,19 @@ const Cart: NextPage = () => {
 	const [error, setError] = useState<string | null>(null);
 
 	let user = supabase.auth.user();
+
+	const getProductURL = (id: ProductMinimal['id']) => {
+		const { data, error } = supabase.storage
+			.from('images')
+			.getPublicUrl(`products/${id}`);
+
+		if (error) {
+			console.error(error);
+			return;
+		}
+
+		return data?.publicURL;
+	};
 
 	const fetchAndSetCartItems = async () => {
 		if (!user) return;
@@ -88,42 +102,68 @@ const Cart: NextPage = () => {
 	return (
 		<>
 			{!numOfItemsInCart && <h3>There are no items in your cart.</h3>}
-			{numOfItemsInCart > 0 && (
-				<>
-					<h3>Total price: ${totalCartPrice}</h3>
-					<Link href="/checkout">
-						<button className="btn btn-primary">Checkout</button>
-					</Link>
-				</>
-			)}
-			{cartItems.map((cartItem) => (
-				<div
-					key={cartItem.id || Date.toString()}
-					className="card mb-3"
-					style={{ maxWidth: '540px' }}
-				>
-					<div className="row g-0">
-						<div className="col-md-4">
-							<img src="..." className="img-fluid rounded-start" alt="..." />
-						</div>
-						<div className="col-md-8">
-							<div className="card-body">
-								<a href={`/product/${cartItem.product.id}`}>
-									<h5 className="card-title">{cartItem.product.name}</h5>
-								</a>
-								<p className="card-text">{cartItem.product.price}</p>
-								<p className="card-text">quantity: {cartItem.quantity}</p>
-								<button
-									className="btn btn-danger"
-									onClick={() => deleteCartItems(cartItem.id)}
-								>
-									Remove from cart
-								</button>
-							</div>
+			<div className="row">
+				<div className="col-9">
+					<table className="table">
+						<thead>
+							<tr>
+								<th></th>
+								<th></th>
+								<th className="text-end">Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							{cartItems.map((cartItem) => (
+								<tr key={cartItem.id}>
+									<td className="col-3">
+										<img
+											src={getProductURL(cartItem.product.id)}
+											alt={cartItem.product.name}
+											className="img-thumbnail"
+										/>
+									</td>
+									<td>
+										<h4>{cartItem.product.name}</h4>
+										<div className="quantity col-2">
+											<label>Quantity:</label>
+											<input
+												type="number"
+												className="form-control"
+												value={cartItem.quantity}
+											/>
+										</div>
+										<div
+											className="btn btn-danger mt-3"
+											onClick={() => deleteCartItems(cartItem.id)}
+										>
+											Remove
+										</div>
+									</td>
+									<td className="fs-4 text-end fw-bold">
+										${cartItem.product.price}
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+				<div className="col-3">
+					<div className="card">
+						<div className="card-body">
+							{numOfItemsInCart > 0 && (
+								<>
+									<h3 className="text-center">
+										<span className="fs-5">Total price:</span> ${totalCartPrice}
+									</h3>
+									<Link href="/checkout">
+										<button className="btn btn-primary w-100">Checkout</button>
+									</Link>
+								</>
+							)}
 						</div>
 					</div>
 				</div>
-			))}
+			</div>
 		</>
 	);
 };

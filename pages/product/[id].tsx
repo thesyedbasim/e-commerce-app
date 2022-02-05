@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { supabase } from '$lib/supabase';
 import { useAppDispatch } from '../../app/hooks';
 import { addItemToCart } from '../../store/cartSlice';
-//import { Cart, CartDB } from '$lib/typescart';
+import { useRouter } from 'next/router';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const id = params!.id;
@@ -26,6 +26,10 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 };
 
 const ProductPage: NextPage<{ product: any }> = ({ product }) => {
+	const router = useRouter();
+
+	const { id } = router.query;
+
 	const [qty, setQty] = useState<number>(1);
 
 	const [error, setError] = useState<string>('');
@@ -48,27 +52,63 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 		dispatch(addItemToCart({ id: data.id, product, quantity: qty }));
 	};
 
+	const getPictureURL = () => {
+		const { data, error } = supabase.storage
+			.from('images')
+			.getPublicUrl(`products/${id}`);
+
+		if (error) {
+			console.error(error);
+			return;
+		}
+
+		console.log(data);
+
+		return data?.publicURL;
+	};
+
+	if (!product) return <h1>No product with the specified id exists.</h1>;
+
 	return (
 		<>
-			<h1>{product.name}</h1>
-			<p>{product.description}</p>
-			<h3>${product.price}</h3>
+			<div className="row">
+				<div className="col-4">
+					<img src={getPictureURL()} alt={product.name} className="img-fluid" />
+				</div>
+				<div className="col-6">
+					<h1>{product.name}</h1>
+					<div className="price d-flex">
+						<p>Price:</p>
+						<h3>${product.price}</h3>
+					</div>
+					<div className="mt-3 description">
+						<p className="fw-bold">Description</p>
+						<p>{product.description}</p>
+					</div>
+				</div>
+				<div className="col-2">
+					<div className="card">
+						<div className="card-body">
+							<label htmlFor="qty">Quantity:</label>
+							<input
+								type="number"
+								id="qty"
+								className="form-control"
+								onChange={(e) => setQty(+e.target.value)}
+								value={qty}
+							/>
 
-			<label htmlFor="qty">Quantity</label>
-			<input
-				type="number"
-				id="qty"
-				onChange={(e) => setQty(+e.target.value)}
-				value={qty}
-			/>
-
-			<button
-				className="btn btn-primary"
-				onClick={addToCart}
-				disabled={qty < 1}
-			>
-				add item to cart
-			</button>
+							<button
+								className="btn btn-primary mt-3"
+								onClick={addToCart}
+								disabled={qty < 1}
+							>
+								Add to cart
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</>
 	);
 };

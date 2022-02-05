@@ -23,7 +23,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 	return getLayout(
 		<Provider store={store}>
 			<NavBar />
-			<Component {...pageProps} />
+			<div className="container-fluid">
+				<Component {...pageProps} />
+			</div>
 		</Provider>
 	);
 }
