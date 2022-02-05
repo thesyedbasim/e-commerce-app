@@ -1,20 +1,24 @@
 import { supabase } from '$lib/supabase';
-import { ProductMinimal } from '$lib/types/product';
+import { addOrder, getOrderById } from '$store/orderSlice';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import ProductItem from 'components/product/ProductItem';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const OrderDetails: NextPage = () => {
 	const router = useRouter();
-
 	const { id } = router.query;
 
 	const user = supabase.auth.user();
 
-	const [products, setProducts] = useState<ProductMinimal[]>();
+	const dispatch = useAppDispatch();
+
+	const order = useAppSelector(getOrderById(id as string));
 
 	useEffect(() => {
+		if (!id) return;
+
 		(async () => {
 			const { data, error } = await supabase
 				.from('orders')
@@ -29,13 +33,16 @@ const OrderDetails: NextPage = () => {
 				return;
 			}
 
-			setProducts(data.products);
+			dispatch(addOrder(data));
 		})();
 	}, [id]);
 
+	if (!order) return <h1>No order with the specified id exists.</h1>;
+
 	return (
 		<>
-			{products?.map((productItem) => (
+			<h1>Order #: {order.id}</h1>
+			{order.products?.map((productItem) => (
 				<ProductItem key={productItem.id} product={productItem} />
 			))}
 		</>

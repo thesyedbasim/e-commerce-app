@@ -9,7 +9,7 @@ export type OrderStatus =
 export type OrderMethod = 'CART';
 
 export interface Order {
-	readonly id: number;
+	readonly id: string;
 	readonly products: ProductMinimal[];
 	readonly status: OrderStatus;
 	readonly paidAt: string; // timestamp
@@ -19,7 +19,7 @@ export interface Order {
 }
 
 export interface OrderDB {
-	readonly id: number;
+	readonly id: string;
 	readonly products: ProductMinimal[];
 	readonly status: OrderStatus;
 	readonly paidAt: string; // timestamp

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getAllOrders, setOrders } from '../../store/orderSlice';
 import { supabase } from '$lib/supabase';
 import { Order } from '$lib/types/order';
+import { dateFormat } from '$lib/utils/dateFormat';
 import Link from 'next/link';
 
 const OrdersPage: NextPage = () => {
@@ -61,12 +62,13 @@ const OrdersPage: NextPage = () => {
 									{' '}
 									<Link href={`/orders/${order.id}`}>
 										{order.products
+											.slice(0, 2)
 											.map((productItem: any) => `${productItem.name}`)
 											.join(', ')}
 									</Link>
 								</td>
-								<td>{order.paidAt}</td>
-								<td>{order.amount}</td>
+								<td>{dateFormat(new Date(order.paidAt))}</td>
+								<td>${order.amount}</td>
 								<td>{order.status}</td>
 							</tr>
 						))}

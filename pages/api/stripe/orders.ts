@@ -17,6 +17,7 @@ export const createOrder = async ({
 		.insert({ amount, products, user: userUid })
 		.single();
 
+	if (error) console.error(error);
 	if (error) throw error;
 
 	return data;
