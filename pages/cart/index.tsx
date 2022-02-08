@@ -11,6 +11,7 @@ import {
 } from '../../store/cartSlice';
 import { supabase } from '$lib/supabase';
 import { ProductMinimal } from '$lib/types/product';
+import { Cart } from '$lib/types/cart';
 
 const Cart: NextPage = () => {
 	const dispatch = useAppDispatch();
@@ -56,7 +57,7 @@ const Cart: NextPage = () => {
 			return;
 		}
 
-		dispatch(setCartItems(data));
+		dispatch(setCartItems(data as Cart[]));
 	};
 
 	const deleteCartItems = async (cartItemId: number) => {

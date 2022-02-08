@@ -34,7 +34,7 @@ const getUserCart = async (userUid: string) => {
 
 	if (error) throw error;
 
-	return data;
+	return data as any[];
 };
 
 const getCartTotal = (cart: any[]) => {
