@@ -30,12 +30,28 @@ const cartSlice = createSlice({
 			state.items = state.items.filter(
 				(item) => item.id !== action.payload.cartItemId
 			);
+		},
+		updateCartItemQuantity: (
+			state,
+			action: PayloadAction<{ itemId: Cart['id']; qty: Cart['quantity'] }>
+		) => {
+			const itemIndex = state.items.findIndex(
+				(item) => (item.id = action.payload.itemId)
+			);
+
+			if (itemIndex < 0) return;
+
+			state.items[itemIndex].quantity = action.payload.qty;
 		}
 	}
 });
 
-export const { addItemToCart, setCartItems, removeItemFromCart } =
-	cartSlice.actions;
+export const {
+	addItemToCart,
+	setCartItems,
+	removeItemFromCart,
+	updateCartItemQuantity
+} = cartSlice.actions;
 
 export const getAllCartItems = (state: RootState) => state.cart.items;
 
