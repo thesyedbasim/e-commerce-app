@@ -13,8 +13,6 @@ const ProductItem: React.FC<{ product: ProductMinimal }> = ({ product }) => {
 			return;
 		}
 
-		console.log(data);
-
 		return data?.publicURL;
 	};
 
