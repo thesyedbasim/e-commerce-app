@@ -38,7 +38,7 @@ const CheckoutForm: React.FC = () => {
 		>
 			<PaymentElement id="payment-element" />
 			<button
-				className="btn btn-primary"
+				className="btn btn-primary mt-3"
 				disabled={!stripe || !elements || isLoading}
 			>
 				{isLoading ? 'loading...' : 'Pay now'}

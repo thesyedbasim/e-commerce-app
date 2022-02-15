@@ -1,10 +1,11 @@
 import { supabase } from '$lib/supabase';
 import { addOrder, getOrderById } from '$store/orderSlice';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import Loader from 'components/misc/Loading';
 import ProductItem from 'components/product/ProductItem';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const OrderDetails: NextPage = () => {
 	const router = useRouter();
@@ -16,37 +17,50 @@ const OrderDetails: NextPage = () => {
 
 	const order = useAppSelector(getOrderById(id as string));
 
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string>('');
+
 	useEffect(() => {
 		if (!id) return;
 
 		(async () => {
-			const { data, error } = await supabase
+			setIsLoading(true);
+
+			const { data, error: sbError } = await supabase
 				.from('orders')
 				.select('*')
 				.eq('user', user?.id)
 				.eq('id', id)
 				.single();
 
-			if (error) {
-				console.error('error while getting order details', error);
+			if (sbError) {
+				console.error('error while getting order details', sbError);
+
+				setIsLoading(false);
+				setError(sbError.message);
 
 				return;
 			}
 
 			dispatch(addOrder(data));
+
+			setIsLoading(false);
 		})();
 	}, [id]);
 
-	if (!order) return <h1>No order with the specified id exists.</h1>;
+	if (isLoading) return <Loader />;
 
-	return (
-		<>
-			<h1>Order #: {order.id}</h1>
-			{order.products?.map((productItem) => (
-				<ProductItem key={productItem.id} product={productItem} />
-			))}
-		</>
-	);
+	if (!isLoading && order)
+		return (
+			<>
+				<h1>Order #: {order.id}</h1>
+				{order.products?.map((productItem) => (
+					<ProductItem key={productItem.id} product={productItem} />
+				))}
+			</>
+		);
+
+	return <h1>No order with the specified id exists.</h1>;
 };
 
 export default OrderDetails;

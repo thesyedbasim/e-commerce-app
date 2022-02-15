@@ -47,13 +47,19 @@ const CheckoutPage: NextPage = () => {
 
 	return (
 		<>
-			<h1>Checkout page</h1>
-			{error && <p>{error}</p>}
-			{!error && clientSecret && (
-				<Elements stripe={stripePromise} options={{ clientSecret }}>
-					<CheckoutForm />
-				</Elements>
-			)}
+			<div className="d-flex justify-content-center row">
+				<div className="card col-10 col-md-8">
+					<div className="card-body">
+						<h1 className="card-title mb-3">Checkout</h1>
+						{error && <p>{error}</p>}
+						{!error && clientSecret && (
+							<Elements stripe={stripePromise} options={{ clientSecret }}>
+								<CheckoutForm />
+							</Elements>
+						)}
+					</div>
+				</div>
+			</div>
 		</>
 	);
 };
