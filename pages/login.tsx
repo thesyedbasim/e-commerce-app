@@ -22,12 +22,15 @@ const Login: NextPage = () => {
 		if (user) router.replace('/');
 	}, []);
 
+	const [error, setError] = useState<string>('');
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 
 	const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
 	useEffect(() => {
+		setError('');
+
 		if (!email.trim() || !password.trim()) setIsFormValid(false);
 		else setIsFormValid(true);
 	}, [email, password]);
@@ -35,50 +38,64 @@ const Login: NextPage = () => {
 	const loginUser = async () => {
 		if (!isFormValid) return;
 
-		const { user, error } = await supabase.auth.signIn({ email, password });
+		const { user, error: sbError } = await supabase.auth.signIn({
+			email,
+			password
+		});
 
-		if (error) console.error('the error while logging in', error);
+		if (sbError) {
+			console.error('the error while logging in', sbError);
+
+			setError(sbError.message);
+		}
 
 		if (user) router.replace('/cart');
 	};
 
 	return (
 		<>
-			<h1>Login</h1>
-			<form
-				className="form"
-				onSubmit={(e) => {
-					e.preventDefault();
-					loginUser();
-				}}
-			>
-				<div className="form-group">
-					<label htmlFor="email">Email</label>
-					<input
-						className="form-control"
-						id="email"
-						type="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-					/>
+			<div className="d-flex justify-content-center row">
+				<div className="card col-10 col-md-6">
+					<div className="card-body">
+						<h1 className="card-title">Login</h1>
+						<form
+							className="form"
+							onSubmit={(e) => {
+								e.preventDefault();
+								loginUser();
+							}}
+						>
+							<div className="form-group">
+								<label htmlFor="email">Email</label>
+								<input
+									className="form-control"
+									id="email"
+									type="email"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+								/>
+							</div>
+							<div className="form-group">
+								<label htmlFor="password">Password</label>
+								<input
+									className="form-control"
+									id="password"
+									type="password"
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+								/>
+							</div>
+							<p className="text-danger">{error}</p>
+							<input
+								type="submit"
+								className="btn btn-primary"
+								disabled={!isFormValid && !!error}
+								value="Login"
+							/>
+						</form>
+					</div>
 				</div>
-				<div className="form-group">
-					<label htmlFor="password">Password</label>
-					<input
-						className="form-control"
-						id="password"
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-					/>
-				</div>
-				<input
-					type="submit"
-					className="btn btn-primary"
-					disabled={!isFormValid}
-					value="Login"
-				/>
-			</form>
+			</div>
 		</>
 	);
 };
