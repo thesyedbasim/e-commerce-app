@@ -56,12 +56,11 @@ export const {
 export const getAllCartItems = (state: RootState) => state.cart.items;
 
 export const getNumOfItemsInCart = (state: RootState): number =>
-	state.cart.items.reduce((total, item) => total + item.quantity, 0);
+	state.cart.items.length;
 
 export const getTotalCartPrice = (state: RootState): number =>
-	state.cart.items.reduce(
-		(total, item) => total + item.product.price * item.quantity,
-		0
-	);
+	+state.cart.items
+		.reduce((total, item) => total + item.product.price * item.quantity, 0)
+		.toFixed(2);
 
 export const cartReducer = cartSlice.reducer;

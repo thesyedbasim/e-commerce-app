@@ -207,7 +207,7 @@ const Cart: NextPage = () => {
 									<h3 className="text-center">
 										<span className="fs-5">Total price:</span> ${totalCartPrice}
 									</h3>
-									<Link href="/checkout">
+									<Link href="/checkout" passHref={true}>
 										<button className="btn btn-primary w-100">Checkout</button>
 									</Link>
 								</>

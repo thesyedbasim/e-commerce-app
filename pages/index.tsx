@@ -10,6 +10,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 			.select('id, name, slug, description');
 
 		if (error) {
+			console.log(error);
 			throw new Error('there was some problem getting data');
 		}
 

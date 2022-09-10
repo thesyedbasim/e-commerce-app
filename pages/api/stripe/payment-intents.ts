@@ -38,10 +38,12 @@ const getUserCart = async (userUid: string) => {
 };
 
 const getCartTotal = (cart: any[]) => {
-	const cartTotal = cart.reduce(
-		(total, cartItem) => total + cartItem.quantity * cartItem.product.price,
-		0
-	);
+	const cartTotal = +cart
+		.reduce(
+			(total, cartItem) => total + cartItem.quantity * cartItem.product.price,
+			0
+		)
+		.toFixed(2);
 
 	return cartTotal;
 };
