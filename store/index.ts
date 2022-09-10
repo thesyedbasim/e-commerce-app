@@ -4,13 +4,15 @@ import { cartReducer } from './cartSlice';
 import { authReducer } from './authSlice';
 import { searchReducer } from './searchSlice';
 import { orderReducer } from './orderSlice';
+import { reviewReducer } from './reviewSlice';
 
 export const store = configureStore({
 	reducer: {
 		cart: cartReducer,
 		auth: authReducer,
 		search: searchReducer,
-		order: orderReducer
+		order: orderReducer,
+		review: reviewReducer
 	}
 });
 
