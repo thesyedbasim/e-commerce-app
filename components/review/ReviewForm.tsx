@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import classnames from 'classnames';
 
 const ReviewForm: React.FC<{ createReview: Function }> = ({ createReview }) => {
 	const [title, setTitle] = useState('');
@@ -26,7 +27,10 @@ const ReviewForm: React.FC<{ createReview: Function }> = ({ createReview }) => {
 			<form className="form mb-5">
 				<div className="form-group">
 					<button
-						className="btn btn-outline-warning"
+						className={classnames(
+							'btn',
+							rating >= 1 ? 'btn-warning' : 'btn-outline-warning'
+						)}
 						onClick={(e) => {
 							e.preventDefault();
 							setRating(1);
@@ -35,7 +39,10 @@ const ReviewForm: React.FC<{ createReview: Function }> = ({ createReview }) => {
 						*
 					</button>
 					<button
-						className="btn btn-outline-warning"
+						className={classnames(
+							'btn',
+							rating >= 2 ? 'btn-warning' : 'btn-outline-warning'
+						)}
 						onClick={(e) => {
 							e.preventDefault();
 							setRating(2);
@@ -44,7 +51,10 @@ const ReviewForm: React.FC<{ createReview: Function }> = ({ createReview }) => {
 						*
 					</button>
 					<button
-						className="btn btn-outline-warning"
+						className={classnames(
+							'btn',
+							rating >= 3 ? 'btn-warning' : 'btn-outline-warning'
+						)}
 						onClick={(e) => {
 							e.preventDefault();
 							setRating(3);
@@ -53,7 +63,10 @@ const ReviewForm: React.FC<{ createReview: Function }> = ({ createReview }) => {
 						*
 					</button>
 					<button
-						className="btn btn-outline-warning"
+						className={classnames(
+							'btn',
+							rating >= 4 ? 'btn-warning' : 'btn-outline-warning'
+						)}
 						onClick={(e) => {
 							e.preventDefault();
 							setRating(4);
@@ -62,7 +75,10 @@ const ReviewForm: React.FC<{ createReview: Function }> = ({ createReview }) => {
 						*
 					</button>
 					<button
-						className="btn btn-outline-warning"
+						className={classnames(
+							'btn',
+							rating >= 5 ? 'btn-warning' : 'btn-outline-warning'
+						)}
 						onClick={(e) => {
 							e.preventDefault();
 							setRating(5);
