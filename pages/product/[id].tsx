@@ -1,11 +1,19 @@
 import { GetServerSideProps } from 'next';
 import type { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 //import { Product } from '$lib/typesproduct';
 import { supabase } from '$lib/supabase';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addItemToCart } from '../../store/cartSlice';
+import {
+	addReview,
+	getAllReviewsOfProduct,
+	setReviews
+} from '../../store/reviewSlice';
 import { useRouter } from 'next/router';
+import ReviewItem from 'components/review/ReviewItem';
+import { Review } from '$lib/types/review';
+import ReviewForm from 'components/review/ReviewForm';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const id = params!.id;
@@ -36,6 +44,8 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 
 	const dispatch = useAppDispatch();
 
+	const reviews = useAppSelector(getAllReviewsOfProduct(product.id));
+
 	const addToCart = async () => {
 		const { data, error: sbError } = await supabase
 			.from('cart')
@@ -62,9 +72,64 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 			return;
 		}
 
-		console.log(data);
-
 		return data?.publicURL;
+	};
+
+	const fetchAndSetProductReviews = async () => {
+		const { data, error } = await supabase
+			.from('reviews')
+			.select(
+				`
+				*,
+				author
+			`
+			)
+			.eq('product', id);
+
+		if (error) {
+			console.error(error);
+		}
+
+		dispatch(setReviews(data || []));
+	};
+
+	useEffect(() => {
+		fetchAndSetProductReviews();
+	}, []);
+
+	const createReview = async ({
+		title,
+		description,
+		rating
+	}: {
+		title: string;
+		description: string;
+		rating: number;
+	}) => {
+		const user = supabase.auth.user();
+
+		if (!user) {
+			return;
+		}
+
+		const { data: userInfo } = await supabase
+			.from('users')
+			.select('name')
+			.eq('uid', user.id)
+			.single();
+
+		const { data } = await supabase
+			.from('reviews')
+			.insert({
+				title,
+				description,
+				rating,
+				product: product.id,
+				author: { id: user.id, name: userInfo.name }
+			})
+			.single();
+
+		dispatch(addReview(data));
 	};
 
 	if (!product) return <h1>No product with the specified id exists.</h1>;
@@ -85,6 +150,17 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 						<p className="fw-bold">Description</p>
 						<p>{product.description}</p>
 					</div>
+					<div className="mt-3 reviews">
+						<p className="fw-bold">Reviews</p>
+						{reviews.length > 0 ? (
+							reviews.map((review) => (
+								<ReviewItem key={review.id} review={review} />
+							))
+						) : (
+							<p>There are no reviews for this product.</p>
+						)}
+					</div>
+					<ReviewForm createReview={createReview} />
 				</div>
 				<div className="col-2">
 					<div className="card">
