@@ -4,7 +4,7 @@ import { Cart } from '$lib/types/cart';
 
 interface InitialState {
 	error?: string;
-	state: 'IDLE' | 'LOADING';
+	state: 'IDLE' | 'LOADING' | 'FETCHED';
 	items: Cart[];
 }
 
@@ -42,6 +42,12 @@ const cartSlice = createSlice({
 			if (itemIndex < 0) return;
 
 			state.items[itemIndex].quantity = action.payload.qty;
+		},
+		setCartItemsFetchStatus: (
+			state,
+			action: PayloadAction<InitialState['state']>
+		) => {
+			state.state = action.payload;
 		}
 	}
 });
@@ -50,7 +56,8 @@ export const {
 	addItemToCart,
 	setCartItems,
 	removeItemFromCart,
-	updateCartItemQuantity
+	updateCartItemQuantity,
+	setCartItemsFetchStatus
 } = cartSlice.actions;
 
 export const getAllCartItems = (state: RootState) => state.cart.items;
@@ -62,5 +69,7 @@ export const getTotalCartPrice = (state: RootState): number =>
 	+state.cart.items
 		.reduce((total, item) => total + item.product.price * item.quantity, 0)
 		.toFixed(2);
+
+export const getCartItemsFetchStatus = (state: RootState) => state.cart.state;
 
 export const cartReducer = cartSlice.reducer;

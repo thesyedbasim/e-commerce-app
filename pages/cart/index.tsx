@@ -1,7 +1,12 @@
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getNumOfItemsInCart, setCartItems } from '../../store/cartSlice';
+import {
+	getCartItemsFetchStatus,
+	getNumOfItemsInCart,
+	setCartItems,
+	setCartItemsFetchStatus
+} from '../../store/cartSlice';
 import { supabase } from '$lib/supabase';
 import { Cart } from '$lib/types/cart';
 import Loader from 'components/misc/Loading';
@@ -12,6 +17,7 @@ const Cart: NextPage = () => {
 	const dispatch = useAppDispatch();
 
 	const numOfItemsInCart = useAppSelector(getNumOfItemsInCart);
+	const cartItemsFetchStatus = useAppSelector(getCartItemsFetchStatus);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
@@ -19,6 +25,8 @@ const Cart: NextPage = () => {
 	let user = supabase.auth.user();
 
 	const fetchAndSetCartItems = async () => {
+		console.log('fetching from db');
+
 		if (!user) return;
 
 		setIsLoading(true);
@@ -38,9 +46,12 @@ const Cart: NextPage = () => {
 		}
 
 		dispatch(setCartItems(data as Cart[]));
+		dispatch(setCartItemsFetchStatus('FETCHED'));
 	};
 
 	useEffect(() => {
+		if (cartItemsFetchStatus === 'FETCHED') return;
+
 		fetchAndSetCartItems();
 	}, []);
 

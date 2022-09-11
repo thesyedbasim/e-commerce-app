@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { supabase } from '$lib/supabase';
 import { Cart, CartDB } from '$lib/types/cart';
 import { ProductMinimal } from '$lib/types/product';
@@ -100,7 +101,11 @@ const CartItem: React.FC<{
 				/>
 			</td>
 			<td>
-				<h4>{cartItem.product.name}</h4>
+				<h4>
+					<Link href={`/product/${cartItem.product.id}`}>
+						{cartItem.product.name}
+					</Link>
+				</h4>
 				<div className="quantity col-2">
 					<label>Quantity:</label>
 					<input
