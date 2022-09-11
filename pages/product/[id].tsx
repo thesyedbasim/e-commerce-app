@@ -39,8 +39,8 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 	const { id } = router.query;
 
 	const [qty, setQty] = useState<number>(1);
-
 	const [error, setError] = useState<string>('');
+	const [user, setUser] = useState(supabase.auth.user());
 
 	const dispatch = useAppDispatch();
 
@@ -106,8 +106,6 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 		description: string;
 		rating: number;
 	}) => {
-		const user = supabase.auth.user();
-
 		if (!user) {
 			return;
 		}
@@ -160,7 +158,7 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 							<p>There are no reviews for this product.</p>
 						)}
 					</div>
-					<ReviewForm createReview={createReview} />
+					{user && <ReviewForm createReview={createReview} />}
 				</div>
 				<div className="col-2">
 					<div className="card">
