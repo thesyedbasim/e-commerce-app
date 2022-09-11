@@ -23,11 +23,16 @@ const reviewSlice = createSlice({
 		},
 		setReviews: (state, action: PayloadAction<Review[]>) => {
 			state.reviews = action.payload;
+		},
+		removeReview: (state, action: PayloadAction<Review['id']>) => {
+			state.reviews = state.reviews.filter(
+				(review) => review.id !== action.payload
+			);
 		}
 	}
 });
 
-export const { addReview, setReviews } = reviewSlice.actions;
+export const { addReview, setReviews, removeReview } = reviewSlice.actions;
 
 export const getAllReviewsOfProduct =
 	(productId: string) =>
