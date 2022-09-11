@@ -14,6 +14,10 @@ import { useRouter } from 'next/router';
 import ReviewItem from 'components/review/ReviewItem';
 import { Review } from '$lib/types/review';
 import ReviewForm from 'components/review/ReviewForm';
+import ProductCta from 'components/product/ProductCta';
+import ProductDetail from 'components/product/ProductDetail';
+import ProductReviews from 'components/product/ProductReviews';
+import ProductImages from 'components/product/ProductImages';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const id = params!.id;
@@ -38,42 +42,11 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 
 	const { id } = router.query;
 
-	const [qty, setQty] = useState<number>(1);
-	const [error, setError] = useState<string>('');
 	const [user, setUser] = useState(supabase.auth.user());
 
 	const dispatch = useAppDispatch();
 
 	const reviews = useAppSelector(getAllReviewsOfProduct(product.id));
-
-	const addToCart = async () => {
-		const { data, error: sbError } = await supabase
-			.from('cart')
-			.insert({ product: product.id, quantity: qty })
-			.single();
-
-		if (sbError) {
-			setError(sbError.message);
-			console.error('the error while adding item to cart', sbError);
-
-			return;
-		}
-
-		dispatch(addItemToCart({ id: data.id, product, quantity: qty }));
-	};
-
-	const getPictureURL = () => {
-		const { data, error } = supabase.storage
-			.from('images')
-			.getPublicUrl(`products/${id}`);
-
-		if (error) {
-			console.error(error);
-			return;
-		}
-
-		return data?.publicURL;
-	};
 
 	const fetchAndSetProductReviews = async () => {
 		const { data, error } = await supabase
@@ -136,51 +109,14 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 		<>
 			<div className="row">
 				<div className="col-4">
-					<img src={getPictureURL()} alt={product.name} className="img-fluid" />
+					<ProductImages product={product} />
 				</div>
 				<div className="col-6">
-					<h1>{product.name}</h1>
-					<div className="price d-flex">
-						<p>Price:</p>
-						<h3>${product.price}</h3>
-					</div>
-					<div className="mt-3 description">
-						<p className="fw-bold">Description</p>
-						<p>{product.description}</p>
-					</div>
-					<div className="mt-3 reviews">
-						<p className="fw-bold">Reviews</p>
-						{reviews.length > 0 ? (
-							reviews.map((review) => (
-								<ReviewItem key={review.id} review={review} />
-							))
-						) : (
-							<p>There are no reviews for this product.</p>
-						)}
-					</div>
-					{user && <ReviewForm createReview={createReview} />}
+					<ProductDetail product={product} />
+					<ProductReviews reviews={reviews} createReview={createReview} />
 				</div>
 				<div className="col-2">
-					<div className="card">
-						<div className="card-body">
-							<label htmlFor="qty">Quantity:</label>
-							<input
-								type="number"
-								id="qty"
-								className="form-control"
-								onChange={(e) => setQty(+e.target.value)}
-								value={qty}
-							/>
-
-							<button
-								className="btn btn-primary mt-3"
-								onClick={addToCart}
-								disabled={qty < 1}
-							>
-								Add to cart
-							</button>
-						</div>
-					</div>
+					<ProductCta product={product} />
 				</div>
 			</div>
 		</>
