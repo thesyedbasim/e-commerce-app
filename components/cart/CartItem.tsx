@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { supabase } from '$lib/supabase';
-import { Cart, CartDB } from '$lib/types/cart';
-import { ProductMinimal } from '$lib/types/product';
+import { Cart } from '$lib/types/cart';
+import { Product } from '$lib/types/product';
 import { removeItemFromCart, updateCartItemQuantity } from '$store/cartSlice';
 import { useAppDispatch } from 'app/hooks';
 import { debounce } from 'lodash';
 import { useCallback } from 'react';
+import CrossIcon from './icons/CrossIcon';
 
 const CartItem: React.FC<{
 	cartItem: Cart;
@@ -16,7 +17,7 @@ const CartItem: React.FC<{
 
 	const dispatch = useAppDispatch();
 
-	const getProductURL = (id: ProductMinimal['id']) => {
+	const getProductURL = (id: Product['id']) => {
 		const { data, error } = supabase.storage
 			.from('images')
 			.getPublicUrl(`products/${id}`);
@@ -40,7 +41,7 @@ const CartItem: React.FC<{
 		console.log(user.id);
 
 		const { error: sbError } = await supabase
-			.from<CartDB>('cart')
+			.from('cart')
 			.update({ quantity: qty })
 			.eq('id', itemId)
 			.eq('user', user.id);
@@ -92,42 +93,44 @@ const CartItem: React.FC<{
 	};
 
 	return (
-		<tr key={cartItem.id}>
-			<td className="col-3">
-				<img
-					src={getProductURL(cartItem.product.id)}
-					alt={cartItem.product.name}
-					className="img-thumbnail"
-				/>
-			</td>
-			<td>
-				<h4>
-					<Link href={`/product/${cartItem.product.id}`}>
-						{cartItem.product.name}
-					</Link>
-				</h4>
-				<div className="quantity col-2">
-					<label>Quantity:</label>
-					<input
-						type="number"
-						className="form-control"
-						value={cartItem.quantity}
-						onChange={(e) => {
-							if (+e.target.value < 0) return;
+		<>
+			<div
+				key={cartItem.id}
+				className="grid grid-cols-[1fr_5fr_1fr_1fr_0.25fr] gap-x-5 items-center justify-items-start"
+			>
+				<Link href={`/product/${cartItem.product.id}`} passHref>
+					<figure className="bg-gray-100 p-5 aspect-square cursor-pointer">
+						<img src={getProductURL(cartItem.product.id)} />
+					</figure>
+				</Link>
+				<Link href={`/product/${cartItem.product.id}`} passHref>
+					<div className="cursor-pointer">
+						<h3 className="text-md font-bold">{cartItem.product.name}</h3>
+						<div className="flex gap-3">
+							<p>
+								{cartItem.variants
+									?.map((variant) => `${variant.name}: ${variant.option.name}`)
+									.join(' | ')}
+							</p>
+						</div>
+					</div>
+				</Link>
+				<input
+					type="number"
+					name="quantity"
+					id="quantity"
+					value={cartItem.quantity}
+					onChange={(e) => {
+						if (+e.target.value < 0) return;
 
-							updateQuantity(cartItem.id, +e.target.value);
-						}}
-					/>
-				</div>
-				<div
-					className="btn btn-danger mt-3"
-					onClick={() => deleteCartItem(cartItem.id)}
-				>
-					Remove
-				</div>
-			</td>
-			<td className="fs-4 text-end fw-bold">${cartItem.product.price}</td>
-		</tr>
+						updateQuantity(cartItem.id, +e.target.value);
+					}}
+					className="border-2 border-gray-300 focus:outline-none hover:border-gray-400 focus:border-gray-400 text-md font-semibold p-4 w-20"
+				/>
+				<p className="text-md font-bold">${cartItem.product.price}</p>
+				<CrossIcon onClick={() => deleteCartItem(cartItem.id)} />
+			</div>
+		</>
 	);
 };
 

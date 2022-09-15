@@ -1,54 +1,45 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type { NextPage } from 'next';
 import Link from 'next/link';
-import { supabase } from '$lib/supabase';
 import { Category } from '$lib/types/category';
-
-export const getServerSideProps: GetServerSideProps = async () => {
-	const getCategoryData = async () => {
-		const { data, error } = await supabase
-			.from('categories')
-			.select('id, name, slug, description');
-
-		if (error) {
-			console.log(error);
-			throw new Error('there was some problem getting data');
-		}
-
-		return data;
-	};
-
-	const data = await getCategoryData();
-
-	if (!data)
-		return {
-			notFound: true
-		};
-
-	return {
-		props: {
-			categories: data
-		}
-	};
-};
+import CategorySection from 'components/homepage-comps/categories/CategorySection';
 
 const Home: NextPage<{ categories: Category[] }> = ({ categories }) => {
 	return (
 		<>
-			<div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-				{categories.map((category) => (
-					<div className="col" key={category.id}>
-						<div className="card">
-							<div className="card-body">
-								<h5 className="card-title fw-bold">{category.name}</h5>
-								<p className="card-text">{category.description}</p>
-								<Link href={`/category/${category.slug}`}>
-									<a className="btn btn-primary">View category</a>
-								</Link>
-							</div>
+			<CategorySection />
+			<section className="my-8">
+				<h2 className="text-3xl font-bold">New arrivals</h2>
+				<div className="grid grid-cols-3 gap-4 mt-4">
+					<div className="">
+						<img src="/book.jpg" />
+						<div className="">
+							<h3 className="text-xl font-bold">Book</h3>
+							<h4 className="text-2xl">$ 34.99</h4>
 						</div>
 					</div>
-				))}
-			</div>
+					<div className="">
+						<img src="/book.jpg" />
+						<div className="">
+							<h3 className="text-xl font-bold">Book</h3>
+							<h4 className="text-2xl">$ 34.99</h4>
+						</div>
+					</div>
+					<div className="">
+						<img src="/book.jpg" />
+						<div className="">
+							<h3 className="text-xl font-bold">Book</h3>
+							<h4 className="text-2xl">$ 34.99</h4>
+						</div>
+					</div>
+					<div className="">
+						<img src="/book.jpg" />
+						<div className="">
+							<h3 className="text-xl font-bold">Book</h3>
+							<h4 className="text-2xl">$ 34.99</h4>
+						</div>
+					</div>
+				</div>
+			</section>
 		</>
 	);
 };

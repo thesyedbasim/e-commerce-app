@@ -3,8 +3,6 @@ import { useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState } from 'react';
 
 const CheckoutForm: React.FC = () => {
-	console.log(window.location.host);
-
 	const stripe = useStripe();
 	const elements = useElements();
 

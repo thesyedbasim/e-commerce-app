@@ -19,6 +19,7 @@ const createPaymentIntent = async ({
 	const paymentIntent = await stripe.paymentIntents.create({
 		amount,
 		currency: 'usd',
+		automatic_payment_methods: { enabled: true },
 		customer: customerId,
 		metadata: { userUid, products: JSON.stringify(products) }
 	});
@@ -44,6 +45,8 @@ const getCartTotal = (cart: any[]) => {
 			0
 		)
 		.toFixed(2);
+
+	console.log('cart total', cartTotal);
 
 	return cartTotal;
 };
@@ -86,10 +89,42 @@ const PaymentIntents = async (req: NextApiRequest, res: NextApiResponse) => {
 
 	let totalAmount: number;
 
-	if (orderMethod !== 'CART')
+	if (orderMethod !== 'CART' && orderMethod !== 'BUY')
 		return res.status(400).json({ message: 'Invalid order method.' });
 
 	const stripeCustomer = await getUserCustomer(userUid as string);
+
+	if (orderMethod === 'BUY') {
+		if (!req.body.product)
+			return res.status(400).json({ message: 'Please provide product id' });
+
+		const { data } = await supabaseService
+			.from('products')
+			.select('*')
+			.eq('id', req.body.product)
+			.single();
+
+		if (!data)
+			return res
+				.status(404)
+				.json({ message: 'There is no product with the specified id' });
+
+		const paymentIntent = await createPaymentIntent({
+			amount: +(data.price * 100).toFixed(2),
+			customerId: stripeCustomer,
+			userUid: userUid as string,
+			products: [
+				{
+					id: data.id,
+					name: data.name,
+					price: data.price,
+					qty: req.body.qty || 1
+				}
+			]
+		});
+
+		return res.status(201).json({ clientSecret: paymentIntent.client_secret });
+	}
 
 	const userCart = await getUserCart(userUid as string);
 
@@ -101,7 +136,7 @@ const PaymentIntents = async (req: NextApiRequest, res: NextApiResponse) => {
 	const cartProducts = getCartProducts(userCart);
 
 	const paymentIntent = await createPaymentIntent({
-		amount: totalAmount * 100,
+		amount: +(totalAmount * 100).toFixed(2),
 		customerId: stripeCustomer,
 		userUid: userUid as string,
 		products: cartProducts

@@ -1,0 +1,16 @@
+.nav {
+	&-bar {
+		@apply bg-black text-gray-400 px-12 py-4;
+	}
+
+	&-content {
+		display: grid;
+		grid-template-columns: max-content 1fr max-content;
+		align-items: center;
+		justify-items: center;
+	}
+
+	&-links-container {
+		@apply flex;
+	}
+}

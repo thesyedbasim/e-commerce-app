@@ -14,6 +14,13 @@ const stripePromise = loadStripe(
 const CheckoutPage: NextPage = () => {
 	const router = useRouter();
 
+	let { method, product, qty } = router.query;
+
+	console.log('method value before logic', method);
+	if (!method || (method !== 'CART' && method !== 'BUY')) method = 'CART';
+
+	console.log('method value after logic', method);
+
 	const [clientSecret, setClientSecret] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
@@ -30,8 +37,8 @@ const CheckoutPage: NextPage = () => {
 		axios
 			.post(
 				'/api/stripe/payment-intents',
-				{},
-				{ headers: { userUid, orderMethod: 'CART' } }
+				{ product, qty },
+				{ headers: { userUid, orderMethod: method as string } }
 			)
 			.then((res) => {
 				setClientSecret(res.data.clientSecret);

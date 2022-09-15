@@ -2,7 +2,8 @@ import { GetServerSideProps } from 'next';
 import type { NextPage } from 'next';
 import { supabase } from '$lib/supabase';
 import type { ProductMinimal } from '$lib/types/product';
-import ProductItem from '../../components/product/ProductItem';
+import ProductSearchItemsContainer from 'components/search/ProductSearchItemsContainer';
+import SearchFiltersSidebar from 'components/search/SearchFiltersSidebar';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const slug = params!.slug;
@@ -10,7 +11,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const getItemsByCategory = async () => {
 		const { data } = await supabase
 			.from('products')
-			.select('id, name, price, category: categories!inner(slug)')
+			.select(
+				'id, name, price, seller (id, name), category: categories!inner(slug)'
+			)
 			.eq('category.slug', slug);
 
 		return data;
@@ -22,13 +25,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 const Category: NextPage<{ products: ProductMinimal[] }> = ({ products }) => {
 	return (
 		<>
-			<div className="row">
-				<div className="col-3"></div>
-				<div className="col-9">
-					{products.map((product) => (
-						<ProductItem key={product.id} product={product} />
-					))}
-				</div>
+			<div className="grid grid-cols-[1fr_3fr]">
+				<SearchFiltersSidebar />
+				<ProductSearchItemsContainer products={products} />
 			</div>
 		</>
 	);
