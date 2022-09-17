@@ -98,7 +98,7 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 
 	return (
 		<>
-			<div className="grid grid-cols-[1.75fr_1fr] gap-10 h-screen">
+			<div className="grid grid-cols-[1.75fr_1fr] gap-10">
 				<ProductImagesSection product={product} />
 				<ProductDetailSection product={product} />
 			</div>

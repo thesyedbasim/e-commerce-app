@@ -7,6 +7,7 @@ import { useAppDispatch } from 'app/hooks';
 import { debounce } from 'lodash';
 import { useCallback } from 'react';
 import CrossIcon from './icons/CrossIcon';
+import { UrlObject } from 'url';
 
 const CartItem: React.FC<{
 	cartItem: Cart;
@@ -92,18 +93,31 @@ const CartItem: React.FC<{
 		dispatch(removeItemFromCart({ cartItemId }));
 	};
 
+	const getProductLink: () => UrlObject = () => {
+		let variantsQuery: { [key: string]: string } = {};
+
+		cartItem.variants?.forEach((variant) => {
+			variantsQuery[variant.name] = variant.option.name;
+		});
+
+		return {
+			pathname: `/product/${cartItem.product.id}`,
+			query: variantsQuery
+		};
+	};
+
 	return (
 		<>
 			<div
 				key={cartItem.id}
 				className="grid grid-cols-[1fr_5fr_1fr_1fr_0.25fr] gap-x-5 items-center justify-items-start"
 			>
-				<Link href={`/product/${cartItem.product.id}`} passHref>
+				<Link href={getProductLink()} passHref>
 					<figure className="bg-gray-100 p-5 aspect-square cursor-pointer">
 						<img src={getProductURL(cartItem.product.id)} />
 					</figure>
 				</Link>
-				<Link href={`/product/${cartItem.product.id}`} passHref>
+				<Link href={getProductLink()} passHref>
 					<div className="cursor-pointer">
 						<h3 className="text-md font-bold">{cartItem.product.name}</h3>
 						<div className="flex gap-3">

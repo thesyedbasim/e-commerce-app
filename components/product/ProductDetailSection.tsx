@@ -4,7 +4,8 @@ import { Product } from '$lib/types/product';
 import { addItemToCart } from '$store/cartSlice';
 import { useAppDispatch } from 'app/hooks';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import ProductReviews from './ProductReviews';
 import ProductVariantsContainer from './ProductVariantsContainer.tsx';
 
 const ProductDetailSection: React.FC<{ product: Product }> = ({ product }) => {
@@ -13,6 +14,10 @@ const ProductDetailSection: React.FC<{ product: Product }> = ({ product }) => {
 
 	const [qty, setQty] = useState<number>(1);
 	const [variants, setVariants] = useState<SelectedVariant[]>([]);
+
+	useEffect(() => {
+		console.log('variants', variants);
+	}, [variants]);
 
 	const addToCart = async () => {
 		const { data, error: sbError } = await supabase
@@ -36,7 +41,9 @@ const ProductDetailSection: React.FC<{ product: Product }> = ({ product }) => {
 				<h1 className="text-3xl font-bold">{product.name}</h1>
 				<h3 className="text-2xl font-bold">${product.price}</h3>
 			</div>
-			<ProductVariantsContainer product={product} setVariants={setVariants} />
+			{product.variants && (
+				<ProductVariantsContainer product={product} setVariants={setVariants} />
+			)}
 			<div className="">
 				<p>{product.description}</p>
 			</div>
@@ -58,6 +65,14 @@ const ProductDetailSection: React.FC<{ product: Product }> = ({ product }) => {
 					Add to cart
 				</button>
 			</div>
+			<details className="p-6 border-y-2 cursor-pointer transition-all">
+				<summary className="list-none relative after:content-[''] after:inline-block after:border-r-4 after:border-b-4 after:p-1 after:border-black after:rotate-45 after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:transition-all">
+					<h3 className="text-2xl">Reviews</h3>
+				</summary>
+				<div className="mt-6">
+					<ProductReviews productId={product.id} />
+				</div>
+			</details>
 		</section>
 	);
 };

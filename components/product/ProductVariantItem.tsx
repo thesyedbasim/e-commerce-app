@@ -1,5 +1,6 @@
 import { Product, ProductVariant } from '$lib/types/product';
 import { NextRouter, useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 type ProductVariantOption = ProductVariant['options'][0];
 type ProductVariantOptionsSize = ProductVariant['optionsSize'];
@@ -20,11 +21,19 @@ const ProductVariantItemSmallText: React.FC<ProductVariantProps> = ({
 	option,
 	variantUpdateHandler
 }) => {
+	useEffect(() => {
+		if (router.query[variant.name] === option.name) {
+			variantUpdateHandler(variant, option);
+		}
+	}, [variant, option]);
+
 	return (
 		<button
-			className={`rounded-full text-lg font-bold bg-gray-${
-				router.query[variant.name] === option.name ? '400' : '100'
-			} hover:bg-gray-200 w-12 h-12`}
+			className={`rounded-full text-lg font-bold ${
+				router.query[variant.name] === option.name
+					? 'border-2 border-black'
+					: 'border border-gray-300'
+			}  w-12 h-12`}
 			onClick={() => {
 				variantUpdateHandler(variant, option);
 			}}
@@ -40,6 +49,12 @@ const ProductVariantItemSmallColor: React.FC<ProductVariantProps> = ({
 	option,
 	variantUpdateHandler
 }) => {
+	useEffect(() => {
+		if (router.query[variant.name] === option.name) {
+			variantUpdateHandler(variant, option);
+		}
+	}, [variant, option]);
+
 	return (
 		<button
 			key={option.name}
@@ -66,11 +81,19 @@ const ProductVariantItemMediumText: React.FC<ProductVariantProps> = ({
 	option,
 	variantUpdateHandler
 }) => {
+	useEffect(() => {
+		if (router.query[variant.name] === option.name) {
+			variantUpdateHandler(variant, option);
+		}
+	}, [variant, option]);
+
 	return (
 		<button
 			key={option.name}
-			className={`rounded-md px-8 py-4 bg-gray-50 border-2 ${
-				router.query[variant.name] === option.name ? 'border-gray-500' : null
+			className={`rounded-md px-8 py-4 border-2 ${
+				router.query[variant.name] === option.name
+					? 'border-black'
+					: 'border-gray-300'
 			}`}
 			onClick={() => {
 				variantUpdateHandler(variant, option);

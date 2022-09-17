@@ -11,9 +11,9 @@ const CategorySection: React.FC = () => {
 	);
 
 	return (
-		<section className="my-8">
+		<section className="space-y-5">
 			<h2 className="text-3xl font-bold">Shop by category</h2>
-			<div className="grid grid-cols-4 gap-4 mt-4">
+			<div className="grid grid-cols-4 gap-4">
 				{isFetching ? (
 					<Loader />
 				) : (

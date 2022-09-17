@@ -25,13 +25,26 @@ const ProductVariantsContainer: React.FC<{
 			{ scroll: false, shallow: true }
 		);
 
-		setVariants((prevVariants) => [
-			...prevVariants,
-			{
-				name: variant.name,
-				option: { name: option.name, meta: option.meta }
+		setVariants((prevVariants) => {
+			const currentVariantIndexInPrevVariant = prevVariants.findIndex(
+				(prevVariant) => prevVariant.name === variant.name
+			);
+
+			const newVariants = [...prevVariants];
+
+			if (currentVariantIndexInPrevVariant < 0) {
+				newVariants.push({ name: variant.name, option });
+
+				return newVariants;
 			}
-		]);
+
+			newVariants[currentVariantIndexInPrevVariant] = {
+				name: variant.name,
+				option
+			};
+
+			return newVariants;
+		});
 	};
 
 	return (
