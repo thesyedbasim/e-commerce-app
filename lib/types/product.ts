@@ -1,25 +1,32 @@
 import { Category } from './category';
+import { Seller } from './seller';
+
+export interface ProductVariant {
+	readonly name: string;
+	readonly options: {
+		readonly name: string;
+		readonly meta?: { [key: string]: any };
+	}[];
+	readonly optionsSize: 'small' | 'medium' | 'large';
+}
 
 export interface Product {
 	readonly id: string;
 	readonly name: string;
 	readonly price: number;
-	readonly category: Category;
 	readonly description: string;
+	readonly seller: Seller;
 	readonly qtyInStock: number;
+	readonly category: Category;
+	readonly prevPrice: number;
+	readonly variants: ProductVariant[];
+	readonly details: any[];
 }
 
+// for searches and product cards where all product information is not displayed
 export interface ProductMinimal {
 	readonly id: string;
 	readonly name: string;
 	readonly price: number;
-}
-
-export interface ProductDB {
-	readonly id: string;
-	readonly name: string;
-	readonly price: number;
-	readonly category: number; // reference
-	readonly description: string;
-	readonly qtyInStock: number;
+	readonly seller: Seller;
 }

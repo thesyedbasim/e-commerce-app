@@ -1,29 +1,25 @@
 import { GetServerSideProps } from 'next';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-//import { Product } from '$lib/typesproduct';
 import { supabase } from '$lib/supabase';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addItemToCart } from '../../store/cartSlice';
 import {
 	addReview,
 	getAllReviewsOfProduct,
 	setReviews
 } from '../../store/reviewSlice';
 import { useRouter } from 'next/router';
-import ReviewItem from 'components/review/ReviewItem';
-import { Review } from '$lib/types/review';
-import ReviewForm from 'components/review/ReviewForm';
-import ProductCta from 'components/product/ProductCta';
-import ProductDetail from 'components/product/ProductDetail';
-import ProductReviews from 'components/product/ProductReviews';
-import ProductImages from 'components/product/ProductImages';
+import ProductImagesSection from 'components/product/ProductImagesSection';
+import ProductDetailSection from 'components/product/ProductDetailSection';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const id = params!.id;
 
 	const getProductInfo = async () => {
-		const { data } = await supabase.from('products').select('*').eq('id', id);
+		const { data } = await supabase
+			.from('products')
+			.select(`*, seller (*)`)
+			.eq('id', id);
 
 		return data;
 	};
@@ -51,12 +47,7 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 	const fetchAndSetProductReviews = async () => {
 		const { data, error } = await supabase
 			.from('reviews')
-			.select(
-				`
-				*,
-				author
-			`
-			)
+			.select(`*`)
 			.eq('product', id);
 
 		if (error) {
@@ -107,17 +98,9 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 
 	return (
 		<>
-			<div className="row">
-				<div className="col-4">
-					<ProductImages product={product} />
-				</div>
-				<div className="col-6">
-					<ProductDetail product={product} />
-					<ProductReviews reviews={reviews} createReview={createReview} />
-				</div>
-				<div className="col-2">
-					<ProductCta product={product} />
-				</div>
+			<div className="grid grid-cols-[1.75fr_1fr] gap-10">
+				<ProductImagesSection product={product} />
+				<ProductDetailSection product={product} />
 			</div>
 		</>
 	);

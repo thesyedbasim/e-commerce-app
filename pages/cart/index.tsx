@@ -10,7 +10,6 @@ import {
 import { supabase } from '$lib/supabase';
 import { Cart } from '$lib/types/cart';
 import Loader from 'components/misc/Loading';
-import CartSummary from 'components/cart/CartSummary';
 import CartItemsSection from 'components/cart/CartItemsSection';
 
 const Cart: NextPage = () => {
@@ -77,15 +76,7 @@ const Cart: NextPage = () => {
 
 	return (
 		<>
-			<h1 className="mb-3">My Cart</h1>
-			<div className="row">
-				<div className="col-9">
-					<CartItemsSection setIsLoading={setIsLoading} setError={setError} />
-				</div>
-				<div className="col-3">
-					<CartSummary />
-				</div>
-			</div>
+			<CartItemsSection setIsLoading={setIsLoading} setError={setError} />
 		</>
 	);
 };

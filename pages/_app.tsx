@@ -1,6 +1,6 @@
 import '../styles/globals.scss';
 import type { AppProps } from 'next/app';
-import 'bootstrap/dist/css/bootstrap.css';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { store } from '../store';
 import NavBar from '../components/nav/Navbar';
@@ -8,6 +8,7 @@ import { supabase } from '$lib/supabase';
 import { setAuthUser } from '../store/authSlice';
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
+import Footer from 'components/Footer/Footer';
 
 supabase.auth.onAuthStateChange(() => store.dispatch(setAuthUser));
 
@@ -17,16 +18,25 @@ export type NextPageWithLayout = NextPage & {
 
 export type AppPropsWithLayout = AppProps & { Component: NextPageWithLayout };
 
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: { refetchOnWindowFocus: false, refetchOnMount: false }
+	}
+});
+
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 	const getLayout = Component.getLayout ?? ((page) => page);
 
 	return getLayout(
-		<Provider store={store}>
-			<NavBar />
-			<div className="container-fluid">
-				<Component {...pageProps} />
-			</div>
-		</Provider>
+		<QueryClientProvider client={queryClient}>
+			<Provider store={store}>
+				<NavBar />
+				<div className="px-24 py-14">
+					<Component {...pageProps} />
+				</div>
+				<Footer />
+			</Provider>
+		</QueryClientProvider>
 	);
 }
 

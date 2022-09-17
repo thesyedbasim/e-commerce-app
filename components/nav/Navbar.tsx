@@ -1,76 +1,107 @@
-import Link from 'next/link';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getAuthUser, setAuthUser } from '../../store/authSlice';
-import { getNumOfItemsInCart } from '../../store/cartSlice';
 import { supabase } from '$lib/supabase';
-import Search from '../misc/Search';
+import { Cart } from '$lib/types/cart';
+import {
+	getCartItemsFetchStatus,
+	getNumOfItemsInCart,
+	setCartItems,
+	setCartItemsFetchStatus
+} from '$store/cartSlice';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import classNames from 'classnames';
+import Search from 'components/misc/Search';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import CartIcon from './nav-icons/Cart';
+import NavIconItem from './nav-icons/NavIconItem';
+import ProfileIcon from './nav-icons/Profile';
+import WishlistIcon from './nav-icons/Wishlist';
+
+import styles from './Nav.module.scss';
 
 const Navbar: React.FC = () => {
 	const dispatch = useAppDispatch();
 
-	const authUser = useAppSelector(getAuthUser);
 	const numOfItemsInCart = useAppSelector(getNumOfItemsInCart);
+	const cartItemsFetchStatus = useAppSelector(getCartItemsFetchStatus);
 
-	supabase.auth.onAuthStateChange(() =>
-		dispatch(setAuthUser(supabase.auth.user()))
-	);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
+
+	let user = supabase.auth.user();
+
+	const fetchAndSetCartItems = async () => {
+		console.log('fetching from db');
+
+		if (!user) return;
+
+		setIsLoading(true);
+
+		const { data, error: sbError } = await supabase
+			.from('cart')
+			.select('*, product (id, name, price)')
+			.eq('user', user.id);
+
+		setIsLoading(false);
+
+		if (sbError) {
+			console.error('error while reading cart', sbError);
+			setError('There was some error fetching cart items.');
+
+			return;
+		}
+
+		dispatch(setCartItems(data as Cart[]));
+		dispatch(setCartItemsFetchStatus('FETCHED'));
+	};
+
+	useEffect(() => {
+		if (cartItemsFetchStatus === 'FETCHED') return;
+
+		fetchAndSetCartItems();
+	}, []);
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-light bg-light mb-5">
-			<div className="container-fluid">
-				<Link href="/">
-					<a className="navbar-brand">E-commerce</a>
-				</Link>
-				<button
-					className="navbar-toggler"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbarSupportedContent"
-					aria-controls="navbarSupportedContent"
-					aria-expanded="false"
-					aria-label="Toggle navigation"
-				>
-					<span className="navbar-toggler-icon" />
-				</button>
-				<div className="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-						{authUser ? (
-							<>
-								<li className="nav-item">
-									<Link href="/signout">
-										<a className="nav-link">Sign out</a>
-									</Link>
-								</li>
-								<li className="nav-item">
-									<Link href="/orders">
-										<a className="nav-link">My orders</a>
-									</Link>
-								</li>
-							</>
-						) : (
-							<>
-								<li className="nav-item">
-									<Link href="/login">
-										<a className="nav-link">Login</a>
-									</Link>
-								</li>
-								<li className="nav-item">
-									<Link href="/signup">
-										<a className="nav-link">Sign up</a>
-									</Link>
-								</li>
-							</>
-						)}
-					</ul>
-					{authUser && (
-						<Link href="/cart">
-							<a className="nav-link">cart: {numOfItemsInCart}</a>
-						</Link>
-					)}
+		<>
+			<nav className={classNames(styles['nav-bar'])}>
+				<div className={classNames(styles['nav-content'])}>
+					<div className="nav-links">
+						<ul className={classNames(styles['nav-links-container'])}>
+							<li className="mx-4">
+								<Link href="/" passHref={true}>
+									<a className="nav-link hover:text-white">Home</a>
+								</Link>
+							</li>
+							<li className="mx-4">
+								<Link href="/search/featured" passHref={true}>
+									<a className="nav-link hover:text-white">Featured</a>
+								</Link>
+							</li>
+							<li className="mx-4">
+								<Link href="/search/new-arrivals" passHref={true}>
+									<a className="nav-link hover:text-white">New Arrivals</a>
+								</Link>
+							</li>
+						</ul>
+					</div>
 					<Search />
+					<div className="nav-icons">
+						<nav className="options-nav">
+							<ul className="flex">
+								<NavIconItem>
+									<CartIcon cartItemsCount={numOfItemsInCart} />
+								</NavIconItem>
+								<NavIconItem>
+									<WishlistIcon />
+								</NavIconItem>
+								<NavIconItem>
+									<ProfileIcon />
+								</NavIconItem>
+							</ul>
+						</nav>
+					</div>
 				</div>
-			</div>
-		</nav>
+			</nav>
+		</>
 	);
 };
 
