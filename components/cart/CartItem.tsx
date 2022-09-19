@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { supabase } from '$lib/supabase';
 import { Cart } from '$lib/types/cart';
-import { Product } from '$lib/types/product';
 import { removeItemFromCart, updateCartItemQuantity } from '$store/cartSlice';
 import { useAppDispatch } from 'app/hooks';
 import { debounce } from 'lodash';
 import { useCallback } from 'react';
 import CrossIcon from './icons/CrossIcon';
 import { UrlObject } from 'url';
+import { getFirstProductURL } from '$lib/utils/getProductURLSupabase';
 
 const CartItem: React.FC<{
 	cartItem: Cart;
@@ -17,19 +17,6 @@ const CartItem: React.FC<{
 	const user = supabase.auth.user();
 
 	const dispatch = useAppDispatch();
-
-	const getProductURL = (id: Product['id']) => {
-		const { data, error } = supabase.storage
-			.from('images')
-			.getPublicUrl(`products/${id}`);
-
-		if (error) {
-			console.error(error);
-			return;
-		}
-
-		return data?.publicURL;
-	};
 
 	const updateQuantityDB = async (
 		itemId: Cart['id'],
@@ -114,7 +101,7 @@ const CartItem: React.FC<{
 			>
 				<Link href={getProductLink()} passHref>
 					<figure className="bg-gray-100 p-5 aspect-square cursor-pointer">
-						<img src={getProductURL(cartItem.product.id)} />
+						<img src={getFirstProductURL(cartItem.product.id)} />
 					</figure>
 				</Link>
 				<Link href={getProductLink()} passHref>

@@ -1,10 +1,10 @@
 import { supabase } from '$lib/supabase';
 import { Product } from '$lib/types/product';
 
-export const getProductURL = (productId: Product['id']) => {
+export function getFirstProductURL(productId: Product['id']) {
 	const { data, error } = supabase.storage
 		.from('images')
-		.getPublicUrl(`products/${productId}`);
+		.getPublicUrl(`products/${productId}/${productId}`);
 
 	if (error) {
 		console.error(error);
@@ -12,4 +12,35 @@ export const getProductURL = (productId: Product['id']) => {
 	}
 
 	return data?.publicURL;
-};
+}
+
+export function getProductURL(productFileName: string) {
+	const { data } = supabase.storage
+		.from('images')
+		.getPublicUrl(`products/${productFileName}`);
+
+	return data;
+}
+
+export async function getAllProductsURL(productId: Product['id']) {
+	console.log('product id', productId);
+	const { data, error } = await supabase.storage
+		.from('images')
+		.list(`products/${productId}`);
+
+	if (error) {
+		console.error(error);
+	}
+
+	console.log('data', data);
+
+	const productImagesFileNames =
+		data?.map(
+			(productImageFileName) =>
+				getProductURL(productImageFileName.name)!.publicURL
+		) || [];
+
+	console.log('product images', productImagesFileNames);
+
+	return productImagesFileNames;
+}
