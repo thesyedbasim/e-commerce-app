@@ -16,10 +16,7 @@ const CheckoutPage: NextPage = () => {
 
 	let { method, product, qty } = router.query;
 
-	console.log('method value before logic', method);
 	if (!method || (method !== 'CART' && method !== 'BUY')) method = 'CART';
-
-	console.log('method value after logic', method);
 
 	const [clientSecret, setClientSecret] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);

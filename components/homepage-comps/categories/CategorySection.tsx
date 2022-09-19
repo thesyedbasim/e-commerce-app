@@ -32,7 +32,7 @@ async function getCategories() {
 		.select('id, name, slug, description');
 
 	if (error) {
-		console.log(error);
+		console.error(error);
 		throw new Error('Cannot fetch categories.');
 	}
 
