@@ -1,6 +1,9 @@
-import { PaymentElement } from '@stripe/react-stripe-js';
-import { useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState } from 'react';
+import {
+	useStripe,
+	useElements,
+	PaymentElement
+} from '@stripe/react-stripe-js';
 
 const CheckoutForm: React.FC = () => {
 	const stripe = useStripe();
@@ -14,14 +17,17 @@ const CheckoutForm: React.FC = () => {
 
 		setIsLoading(true);
 
+		const SUCCESS_REDIRECT_URL = `${window.location.protocol}//${window.location.host}/checkout/success`;
+
 		const { error } = await stripe.confirmPayment({
 			elements,
-			confirmParams: { return_url: `${window.location.host}/checkout/success` }
+			confirmParams: { return_url: SUCCESS_REDIRECT_URL }
 		});
 
 		if (error.type === 'card_error' || error.type === 'validation_error') {
 			setMessage(error.message!);
 		} else {
+			console.error(error);
 			setMessage('An unexpected error occured.');
 		}
 
