@@ -14,8 +14,6 @@ const stripePromise = loadStripe(
 const CheckoutPage: NextPage = () => {
 	const router = useRouter();
 
-	let { product, qty } = router.query;
-
 	const DEFAULT_CHECKOUT_METHOD = 'CART';
 
 	const [clientSecret, setClientSecret] = useState<string>('');
@@ -34,8 +32,10 @@ const CheckoutPage: NextPage = () => {
 		axios
 			.post(
 				'/api/stripe/payment-intents',
-				{ product, qty },
-				{ headers: { userUid, orderMethod: DEFAULT_CHECKOUT_METHOD } }
+				{},
+				{
+					headers: { userUid, orderMethod: DEFAULT_CHECKOUT_METHOD }
+				}
 			)
 			.then((res) => {
 				setClientSecret(res.data.clientSecret);
