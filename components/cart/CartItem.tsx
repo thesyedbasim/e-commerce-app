@@ -26,8 +26,6 @@ const CartItem: React.FC<{
 
 		if (!user) return;
 
-		console.log(user.id);
-
 		const { error: sbError } = await supabase
 			.from('cart')
 			.update({ quantity: qty })
@@ -53,8 +51,8 @@ const CartItem: React.FC<{
 		[]
 	);
 
-	const updateQuantity = async (itemId: Cart['id'], qty: Cart['quantity']) => {
-		await updateQuantityHandler(itemId, qty);
+	const updateQuantity = (itemId: Cart['id'], qty: Cart['quantity']) => {
+		updateQuantityHandler(itemId, qty);
 
 		dispatch(updateCartItemQuantity({ itemId, qty }));
 	};
@@ -95,10 +93,7 @@ const CartItem: React.FC<{
 
 	return (
 		<>
-			<div
-				key={cartItem.id}
-				className="grid grid-cols-[1fr_5fr_1fr_1fr_0.25fr] gap-x-5 items-center justify-items-start"
-			>
+			<div className="grid grid-cols-[1fr_5fr_1fr_1fr_0.25fr] gap-x-5 items-center justify-items-start">
 				<Link href={getProductLink()} passHref>
 					<figure className="bg-gray-100 p-5 aspect-square cursor-pointer">
 						<img src={getFirstProductURL(cartItem.product.id)} />

@@ -57,24 +57,16 @@ const Customers = async (req: NextApiRequest, res: NextApiResponse) => {
 		return;
 	}
 
-	console.log('user id exists', userId);
-
 	const user = await getUser(userId);
 
 	if (!user) {
 		return res.status(406).json({ message: 'No user found for the user.' });
 	}
 
-	console.log('user exists in supabase');
-
 	let customer;
 	try {
 		customer = await createCustomer(user);
-
-		console.log('customer created', customer);
 	} catch (err) {
-		console.error('error creating customer', err);
-
 		return res
 			.status(500)
 			.json({ message: 'There was some problem creating the stripe customer' });

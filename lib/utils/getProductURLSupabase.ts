@@ -23,7 +23,6 @@ export function getProductURL(productFileName: string) {
 }
 
 export async function getAllProductsURL(productId: Product['id']) {
-	console.log('product id', productId);
 	const { data, error } = await supabase.storage
 		.from('images')
 		.list(`products/${productId}`);
@@ -32,15 +31,11 @@ export async function getAllProductsURL(productId: Product['id']) {
 		console.error(error);
 	}
 
-	console.log('data', data);
-
 	const productImagesFileNames =
 		data?.map(
 			(productImageFileName) =>
 				getProductURL(productImageFileName.name)!.publicURL
 		) || [];
-
-	console.log('product images', productImagesFileNames);
 
 	return productImagesFileNames;
 }

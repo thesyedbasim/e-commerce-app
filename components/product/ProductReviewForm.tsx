@@ -15,7 +15,7 @@ const ProductReviewForm: React.FC<{ productId: Product['id'] }> = ({
 
 	const createReview = async () => {
 		const user = supabase.auth.user();
-		console.log('sb user', user);
+
 		if (!user) return;
 
 		const { data: userInfo } = await supabase
@@ -46,7 +46,6 @@ const ProductReviewForm: React.FC<{ productId: Product['id'] }> = ({
 			rating > 5
 		)
 			return;
-		console.log('handle submit');
 
 		await createReview();
 

@@ -4,7 +4,7 @@ import { Product } from '$lib/types/product';
 import { addItemToCart } from '$store/cartSlice';
 import { useAppDispatch } from 'app/hooks';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ProductReviews from './ProductReviews';
 import ProductVariantsContainer from './ProductVariantsContainer.tsx';
 
@@ -14,10 +14,6 @@ const ProductDetailSection: React.FC<{ product: Product }> = ({ product }) => {
 
 	const [qty, setQty] = useState<number>(1);
 	const [variants, setVariants] = useState<SelectedVariant[]>([]);
-
-	useEffect(() => {
-		console.log('variants', variants);
-	}, [variants]);
 
 	const addToCart = async () => {
 		const { data, error: sbError } = await supabase
