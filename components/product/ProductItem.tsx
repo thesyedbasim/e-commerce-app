@@ -1,29 +1,36 @@
 import Link from 'next/link';
-import { ProductMinimal } from '$lib/types/product';
 import { getFirstProductURL } from '$lib/utils/getProductURLSupabase';
+import { Order } from '$lib/types/order';
 
-const ProductItem: React.FC<{ product: ProductMinimal }> = ({ product }) => {
+const ProductItem: React.FC<{ product: Order['products'][0] }> = ({
+	product
+}) => {
 	return (
-		<div className="card mb-3" style={{ maxWidth: '540px' }}>
-			<div className="row g-0">
-				<div className="col-md-4">
-					<img
-						src={getFirstProductURL(product.id)}
-						className="img-fluid rounded-start"
-						alt={product.name}
-					/>
-				</div>
-				<div className="col-md-8">
-					<div className="card-body">
-						<h5 className="card-title">{product.name}</h5>
-						<h4>${product.price}</h4>
-						<br />
-						<Link href={`/product/${product.id}`}>
-							<a>Item details</a>
-						</Link>
+		<div className="grid grid-cols-[1fr_5fr_1fr_1fr] gap-x-5 items-center justify-items-start">
+			<Link href={'/'} passHref>
+				<figure className="bg-gray-100 p-5 aspect-square cursor-pointer">
+					<img src={getFirstProductURL(product.id)} />
+				</figure>
+			</Link>
+			<Link href={'/'} passHref>
+				<div className="cursor-pointer">
+					<h3 className="text-md font-bold">{product.name}</h3>
+					<div className="flex gap-3">
+						<p>
+							{product.variantsSelected
+								?.map((variant) => `${variant.name}: ${variant.option.name}`)
+								.join(' | ')}
+						</p>
 					</div>
 				</div>
-			</div>
+			</Link>
+			<p
+				id="quantity"
+				className="border-2 border-gray-300 text-md font-semibold p-4 w-20"
+			>
+				{product.quantity}
+			</p>
+			<p className="text-md font-bold">${product.price}</p>
 		</div>
 	);
 };

@@ -1,4 +1,5 @@
-import { ProductMinimal } from './product';
+import { Cart } from './cart';
+import { Product } from './product';
 
 export type OrderStatus =
 	| 'PAYMENT_PENDING'
@@ -10,20 +11,16 @@ export type OrderMethod = 'CART';
 
 export interface Order {
 	readonly id: string;
-	readonly products: ProductMinimal[];
-	readonly status: OrderStatus;
 	readonly paidAt: string; // timestamp
-	readonly amount: number;
-	readonly userUid: string; // reference
-	readonly method: OrderMethod;
-}
-
-export interface OrderDB {
-	readonly id: string;
-	readonly products: ProductMinimal[];
-	readonly status: OrderStatus;
-	readonly paidAt: string; // timestamp
-	readonly amount: number;
 	readonly user: string; // reference
+	readonly amount: number;
+	readonly products: {
+		id: Product['id'];
+		name: Product['name'];
+		price: Product['price'];
+		quantity: Cart['quantity'];
+		variantsSelected: Cart['variants'];
+	}[];
+	readonly status: OrderStatus;
 	readonly method: OrderMethod;
 }

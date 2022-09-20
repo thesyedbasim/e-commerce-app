@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { initStripe } from '$lib/stripe';
 import { getServiceSupabase } from '$lib/supabase';
+import { Cart } from '$lib/types/cart';
 
 const stripe = initStripe();
 const supabaseService = getServiceSupabase();
@@ -35,7 +36,7 @@ const getUserCart = async (userUid: string) => {
 
 	if (error) throw error;
 
-	return data as any[];
+	return data as Cart[];
 };
 
 const getCartTotal = (cart: any[]) => {
@@ -49,12 +50,13 @@ const getCartTotal = (cart: any[]) => {
 	return cartTotal;
 };
 
-const getCartProducts = (cart: any[]) => {
+const getCartProducts = (cart: Cart[]) => {
 	const cartProducts = cart.map((cartItem) => ({
 		id: cartItem.product.id,
 		name: cartItem.product.name,
 		price: cartItem.product.price,
-		quantity: cartItem.quantity
+		quantity: cartItem.quantity,
+		variantsSelected: cartItem.variants
 	}));
 
 	return cartProducts;

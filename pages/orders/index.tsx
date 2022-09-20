@@ -52,32 +52,33 @@ const OrdersPage: NextPage = () => {
 		return <h3>You do not have any orders.</h3>;
 
 	return (
-		<table className="table">
-			<thead>
-				<tr>
-					<td>Order #</td>
-					<td>Products</td>
-					<td>Ordered at</td>
-					<td>Total price</td>
-					<td>Status</td>
+		<table className="border-2 border-black mx-auto">
+			<thead className="bg-black text-white">
+				<tr className="">
+					<th className="py-3 px-4 text-left">Order #</th>
+					<th className="py-3 px-4 text-left">Products</th>
+					<th className="py-3 px-4 text-left">Ordered at</th>
+					<th className="py-3 px-4 text-left">Total price</th>
+					<th className="py-3 px-4 text-left">Status</th>
 				</tr>
 			</thead>
 			<tbody>
 				{orders.map((order) => (
 					<tr key={order.id}>
-						<td>{order.id}</td>
-						<td>
+						<td className="px-4 py-4">{order.id}</td>
+						<td className="px-4 py-4">
 							{' '}
 							<Link href={`/orders/${order.id}`}>
-								{order.products
-									.slice(0, 2)
-									.map((productItem: any) => `${productItem.name}`)
-									.join(', ')}
+								{`${order.products[0].name}${
+									order.products.length > 1
+										? ' and ' + (order.products.length - 1) + ' more'
+										: null
+								}`}
 							</Link>
 						</td>
-						<td>{dateFormat(new Date(order.paidAt))}</td>
-						<td>${order.amount}</td>
-						<td>{order.status}</td>
+						<td className="px-4 py-4">{dateFormat(new Date(order.paidAt))}</td>
+						<td className="px-4 py-4">${order.amount}</td>
+						<td className="px-4 py-4">{order.status}</td>
 					</tr>
 				))}
 			</tbody>
