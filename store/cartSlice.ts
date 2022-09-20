@@ -36,12 +36,16 @@ const cartSlice = createSlice({
 			action: PayloadAction<{ itemId: Cart['id']; qty: Cart['quantity'] }>
 		) => {
 			const itemIndex = state.items.findIndex(
-				(item) => (item.id = action.payload.itemId)
+				(item) => item.id === action.payload.itemId
 			);
 
 			if (itemIndex < 0) return;
 
-			state.items[itemIndex].quantity = action.payload.qty;
+			const newCartItems = [...state.items];
+
+			newCartItems[itemIndex].quantity = action.payload.qty;
+
+			state.items = newCartItems;
 		},
 		setCartItemsFetchStatus: (
 			state,

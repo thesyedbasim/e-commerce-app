@@ -46,8 +46,6 @@ const getCartTotal = (cart: any[]) => {
 		)
 		.toFixed(2);
 
-	console.log('cart total', cartTotal);
-
 	return cartTotal;
 };
 
