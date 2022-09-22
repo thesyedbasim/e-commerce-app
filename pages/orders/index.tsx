@@ -6,7 +6,7 @@ import { supabase } from '$lib/supabase';
 import { Order } from '$lib/types/order';
 import { dateFormat } from '$lib/utils/dateFormat';
 import Link from 'next/link';
-import Loader from 'components/misc/Loading';
+import Loader from '@components/misc/Loading';
 
 const OrdersPage: NextPage = () => {
 	const user = supabase.auth.user();

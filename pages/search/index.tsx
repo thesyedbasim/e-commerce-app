@@ -1,7 +1,7 @@
 import { supabase } from '$lib/supabase';
 import { ProductMinimal } from '$lib/types/product';
-import ProductSearchItemsContainer from 'components/search/ProductSearchItemsContainer';
-import SearchFiltersSidebar from 'components/search/SearchFiltersSidebar';
+import SearchView from '@components/search/SearchView';
+import SearchSidebar from '@components/search/SearchSidebar';
 import type { GetServerSideProps, NextPage } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
@@ -30,7 +30,7 @@ const SearchPage: NextPage<{
 	return (
 		<>
 			<div className="grid grid-cols-[1fr_3fr]">
-				<SearchFiltersSidebar />
+				<SearchSidebar />
 				<div className="">
 					{searchResults.length === 0 ? (
 						<h2 className="text-lg">
@@ -43,7 +43,7 @@ const SearchPage: NextPage<{
 								Results for{' '}
 								<span className="font-bold">&ldquo;{searchQuery}&rdquo;</span>
 							</h2>
-							<ProductSearchItemsContainer products={searchResults} />
+							<SearchView products={searchResults} />
 						</>
 					)}
 				</div>

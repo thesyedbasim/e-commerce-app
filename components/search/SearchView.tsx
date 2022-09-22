@@ -1,9 +1,8 @@
 import { ProductMinimal } from '$lib/types/product';
 import { useRouter } from 'next/router';
-import ProductSearchItem from './ProductSearchItem';
-const ProductSearchItemsContainer: React.FC<{ products: ProductMinimal[] }> = ({
-	products
-}) => {
+import ProductSearchItem from './SearchProductItem';
+
+const SearchView: React.FC<{ products: ProductMinimal[] }> = ({ products }) => {
 	const router = useRouter();
 
 	let arrangedProducts = [...products];
@@ -25,4 +24,4 @@ const ProductSearchItemsContainer: React.FC<{ products: ProductMinimal[] }> = ({
 	);
 };
 
-export default ProductSearchItemsContainer;
+export default SearchView;

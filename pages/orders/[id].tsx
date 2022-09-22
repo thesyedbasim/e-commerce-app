@@ -1,8 +1,8 @@
 import { supabase } from '$lib/supabase';
 import { addOrder, getOrderById } from '$store/orderSlice';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import Loader from 'components/misc/Loading';
-import ProductItem from 'components/product/ProductItem';
+import Loader from '@components/misc/Loading';
+import OrderProductItem from '@components/order/OrderProductItem';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -63,7 +63,7 @@ const OrderDetails: NextPage = () => {
 				</div>
 				<div className="grid grid-rows-1 gap-y-10">
 					{order.products.map((productItem) => (
-						<ProductItem key={productItem.id} product={productItem} />
+						<OrderProductItem key={productItem.id} product={productItem} />
 					))}
 				</div>
 			</>

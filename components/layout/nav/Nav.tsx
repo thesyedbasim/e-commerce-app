@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import styles from './Nav.module.scss';
 import { supabase } from '$lib/supabase';
 import { Cart } from '$lib/types/cart';
 import {
@@ -8,15 +10,11 @@ import {
 } from '$store/cartSlice';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import classNames from 'classnames';
-import Search from 'components/misc/Search';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import CartIcon from './nav-icons/Cart';
-import NavIconItem from './nav-icons/NavIconItem';
-import ProfileIcon from './nav-icons/Profile';
-import WishlistIcon from './nav-icons/Wishlist';
-
-import styles from './Nav.module.scss';
+import Search from '@components/misc/Search';
+import CartIcon from '@icons/Cart';
+import ProfileIcon from '@icons/Profile';
+import WishlistIcon from '@icons/Wishlist';
 
 const Navbar: React.FC = () => {
 	const dispatch = useAppDispatch();
@@ -85,15 +83,24 @@ const Navbar: React.FC = () => {
 					<div className="nav-icons">
 						<nav className="options-nav">
 							<ul className="flex">
-								<NavIconItem>
-									<CartIcon cartItemsCount={numOfItemsInCart} />
-								</NavIconItem>
-								<NavIconItem>
+								<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
+									<Link href="/cart" passHref>
+										<div className="relative">
+											{numOfItemsInCart ? (
+												<div className="item-counter absolute flex items-center justify-center p-2 -top-1.5 -right-1.5 bg-white text-black w-4 h-4 rounded-full font-semibold text-xs">
+													{numOfItemsInCart}
+												</div>
+											) : null}
+											<CartIcon cartItemsCount={numOfItemsInCart} />
+										</div>
+									</Link>
+								</li>
+								<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
 									<WishlistIcon />
-								</NavIconItem>
-								<NavIconItem>
+								</li>
+								<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
 									<ProfileIcon />
-								</NavIconItem>
+								</li>
 							</ul>
 						</nav>
 					</div>

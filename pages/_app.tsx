@@ -3,12 +3,12 @@ import type { AppProps } from 'next/app';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { store } from '../store';
-import NavBar from '../components/nav/Navbar';
 import { supabase } from '$lib/supabase';
 import { setAuthUser } from '../store/authSlice';
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
-import Footer from 'components/Footer/Footer';
+import NavBar from '@components/layout/nav/Nav';
+import Footer from '@components/layout/footer/Footer';
 
 supabase.auth.onAuthStateChange(() => store.dispatch(setAuthUser));
 

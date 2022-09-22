@@ -6,9 +6,9 @@ import { useAppDispatch } from 'app/hooks';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ProductReviews from './ProductReviews';
-import ProductVariantsContainer from './ProductVariantsContainer.tsx';
+import ProductVariants from './ProductVariants';
 
-const ProductDetailSection: React.FC<{ product: Product }> = ({ product }) => {
+const ProductDetails: React.FC<{ product: Product }> = ({ product }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
@@ -38,7 +38,7 @@ const ProductDetailSection: React.FC<{ product: Product }> = ({ product }) => {
 				<h3 className="text-2xl font-bold">${product.price}</h3>
 			</div>
 			{product.variants && (
-				<ProductVariantsContainer product={product} setVariants={setVariants} />
+				<ProductVariants product={product} setVariants={setVariants} />
 			)}
 			<div className="">
 				<p>{product.description}</p>
@@ -75,4 +75,4 @@ const ProductDetailSection: React.FC<{ product: Product }> = ({ product }) => {
 	);
 };
 
-export default ProductDetailSection;
+export default ProductDetails;

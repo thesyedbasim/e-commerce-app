@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import Link from 'next/link';
 import CartItem from './CartItem';
 
-const CartItemsSection: React.FC<{
+const CartView: React.FC<{
 	setIsLoading: Function;
 	setError: Function;
 }> = ({ setIsLoading, setError }) => {
@@ -49,4 +49,4 @@ const CartItemsSection: React.FC<{
 	);
 };
 
-export default CartItemsSection;
+export default CartView;

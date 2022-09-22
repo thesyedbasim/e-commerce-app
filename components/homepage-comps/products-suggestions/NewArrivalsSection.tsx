@@ -1,7 +1,7 @@
 import { supabase } from '$lib/supabase';
 import { useQuery } from '@tanstack/react-query';
-import Loader from 'components/misc/Loading';
-import ProductSearchItem from 'components/search/ProductSearchItem';
+import Loader from '@components/misc/Loading';
+import SearchProductItem from '@components/search/SearchProductItem';
 
 const fetchNewArrivalsProducts = async () => {
 	const { data } = await supabase
@@ -26,7 +26,7 @@ const NewArrivalsSection: React.FC = () => {
 					<Loader />
 				) : (
 					newArrivalsProducts?.map((product) => (
-						<ProductSearchItem key={product.id} product={product} />
+						<SearchProductItem key={product.id} product={product} />
 					))
 				)}
 			</div>

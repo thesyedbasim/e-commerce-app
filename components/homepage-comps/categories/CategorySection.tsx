@@ -2,7 +2,7 @@ import { supabase } from '$lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 import { Category } from '$lib/types/category';
 import CategoryItem from './CategoryItem';
-import Loader from 'components/misc/Loading';
+import Loader from '@components/misc/Loading';
 
 const CategorySection: React.FC = () => {
 	const { data: categories, isFetching } = useQuery(
