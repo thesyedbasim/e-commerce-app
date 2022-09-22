@@ -4,7 +4,7 @@ import { Category } from '$lib/types/category';
 import CategoryItem from './CategoryItem';
 import Loader from '@components/misc/Loading';
 
-const CategorySection: React.FC = () => {
+const Categories: React.FC = () => {
 	const { data: categories, isFetching } = useQuery(
 		['categories'],
 		getCategories
@@ -39,4 +39,4 @@ async function getCategories() {
 	return data;
 }
 
-export default CategorySection;
+export default Categories;

@@ -11,7 +11,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import classNames from 'classnames';
 import Link from 'next/link';
-import Search from '@components/misc/Search';
+import SearchBar from '@components/search/SearchBar';
 import CartIcon from '@icons/Cart';
 import ProfileIcon from '@icons/Profile';
 import WishlistIcon from '@icons/Wishlist';
@@ -79,7 +79,7 @@ const Navbar: React.FC = () => {
 							</li>
 						</ul>
 					</div>
-					<Search />
+					<SearchBar />
 					<div className="nav-icons">
 						<nav className="options-nav">
 							<ul className="flex">
