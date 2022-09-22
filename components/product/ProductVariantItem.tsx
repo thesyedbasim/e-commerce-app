@@ -114,6 +114,10 @@ const ProductVariantItem: React.FC<{
 }> = ({ variant, variantUpdateHandler }) => {
 	const router = useRouter();
 
+	useEffect(() => {
+		variantUpdateHandler(variant, variant.options[0]);
+	}, []);
+
 	return (
 		<div className="space-y-4">
 			<h4 className="text-lg font-bold">{variant.name}</h4>
@@ -125,6 +129,7 @@ const ProductVariantItem: React.FC<{
 					if (type === 'Color')
 						return (
 							<ProductVariantItemSmallColor
+								key={option.name}
 								router={router}
 								variant={variant}
 								option={option}
@@ -136,6 +141,7 @@ const ProductVariantItem: React.FC<{
 						if (size === 'small')
 							return (
 								<ProductVariantItemSmallText
+									key={option.name}
 									router={router}
 									variant={variant}
 									option={option}
@@ -146,6 +152,7 @@ const ProductVariantItem: React.FC<{
 						if (size === 'medium')
 							return (
 								<ProductVariantItemMediumText
+									key={option.name}
 									router={router}
 									variant={variant}
 									option={option}
@@ -156,6 +163,7 @@ const ProductVariantItem: React.FC<{
 						if (size === 'large')
 							return (
 								<ProductVariantItemLargeText
+									key={option.name}
 									router={router}
 									variant={variant}
 									option={option}

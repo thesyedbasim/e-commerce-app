@@ -117,7 +117,7 @@ const CartItem: React.FC<{
 					id="quantity"
 					value={cartItem.quantity}
 					onChange={(e) => {
-						if (+e.target.value < 0) return;
+						if (+e.target.value <= 0) return;
 
 						updateQuantity(cartItem.id, +e.target.value);
 					}}
