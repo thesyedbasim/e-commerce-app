@@ -9,8 +9,8 @@ import {
 	setReviews
 } from '../../store/reviewSlice';
 import { useRouter } from 'next/router';
-import ProductImagesSection from 'components/product/ProductImagesSection';
-import ProductDetailSection from 'components/product/ProductDetailSection';
+import ProductImages from '@components/product/ProductImages';
+import ProductDetails from '@components/product/ProductDetails';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const id = params!.id;
@@ -99,8 +99,8 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 	return (
 		<>
 			<div className="grid grid-cols-[1.75fr_1fr] gap-10">
-				<ProductImagesSection product={product} />
-				<ProductDetailSection product={product} />
+				<ProductImages product={product} />
+				<ProductDetails product={product} />
 			</div>
 		</>
 	);

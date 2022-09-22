@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-const Search: React.FC = () => {
+const SearchBar: React.FC = () => {
 	const router = useRouter();
 
 	const [searchQuery, setSearchQuery] = useState('');
@@ -27,4 +27,4 @@ const Search: React.FC = () => {
 		</div>
 	);
 };
-export default Search;
+export default SearchBar;

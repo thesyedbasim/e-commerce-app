@@ -9,8 +9,8 @@ import {
 } from '../../store/cartSlice';
 import { supabase } from '$lib/supabase';
 import { Cart } from '$lib/types/cart';
-import Loader from 'components/misc/Loading';
-import CartItemsSection from 'components/cart/CartItemsSection';
+import Loader from '@components/misc/Loading';
+import CartView from '@components/cart/CartView';
 
 const Cart: NextPage = () => {
 	const dispatch = useAppDispatch();
@@ -74,7 +74,7 @@ const Cart: NextPage = () => {
 
 	return (
 		<>
-			<CartItemsSection setIsLoading={setIsLoading} setError={setError} />
+			<CartView setIsLoading={setIsLoading} setError={setError} />
 		</>
 	);
 };

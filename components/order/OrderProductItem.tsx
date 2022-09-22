@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getFirstProductURL } from '$lib/utils/getProductURLSupabase';
 import { Order } from '$lib/types/order';
 
-const ProductItem: React.FC<{ product: Order['products'][0] }> = ({
+const OrderProductItem: React.FC<{ product: Order['products'][0] }> = ({
 	product
 }) => {
 	return (
@@ -35,4 +35,4 @@ const ProductItem: React.FC<{ product: Order['products'][0] }> = ({
 	);
 };
 
-export default ProductItem;
+export default OrderProductItem;

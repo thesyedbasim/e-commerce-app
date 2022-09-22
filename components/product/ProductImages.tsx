@@ -5,7 +5,7 @@ import {
 } from '$lib/utils/getProductURLSupabase';
 import { useQuery } from '@tanstack/react-query';
 
-const ProductImagesSection: React.FC<{ product: Product }> = ({ product }) => {
+const ProductImages: React.FC<{ product: Product }> = ({ product }) => {
 	const { data: productsURLs } = useQuery(
 		['productsURLs'],
 		async () => await getAllProductsURL(product.id)
@@ -30,4 +30,4 @@ const ProductImagesSection: React.FC<{ product: Product }> = ({ product }) => {
 	);
 };
 
-export default ProductImagesSection;
+export default ProductImages;

@@ -2,7 +2,7 @@ import { ProductMinimal } from '$lib/types/product';
 import { getFirstProductURL } from '$lib/utils/getProductURLSupabase';
 import Link from 'next/link';
 
-const ProductSearchItem: React.FC<{ product: ProductMinimal }> = ({
+const SearchProductItem: React.FC<{ product: ProductMinimal }> = ({
 	product
 }) => {
 	return (
@@ -19,4 +19,4 @@ const ProductSearchItem: React.FC<{ product: ProductMinimal }> = ({
 	);
 };
 
-export default ProductSearchItem;
+export default SearchProductItem;

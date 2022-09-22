@@ -2,8 +2,8 @@ import { GetServerSideProps } from 'next';
 import type { NextPage } from 'next';
 import { supabase } from '$lib/supabase';
 import type { ProductMinimal } from '$lib/types/product';
-import ProductSearchItemsContainer from 'components/search/ProductSearchItemsContainer';
-import SearchFiltersSidebar from 'components/search/SearchFiltersSidebar';
+import SearchView from '@components/search/SearchView';
+import SearchSidebar from '@components/search/SearchSidebar';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const slug = params!.slug;
@@ -26,8 +26,8 @@ const Category: NextPage<{ products: ProductMinimal[] }> = ({ products }) => {
 	return (
 		<>
 			<div className="grid grid-cols-[1fr_3fr]">
-				<SearchFiltersSidebar />
-				<ProductSearchItemsContainer products={products} />
+				<SearchSidebar />
+				<SearchView products={products} />
 			</div>
 		</>
 	);

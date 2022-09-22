@@ -5,7 +5,7 @@ import { removeItemFromCart, updateCartItemQuantity } from '$store/cartSlice';
 import { useAppDispatch } from 'app/hooks';
 import { debounce } from 'lodash';
 import { useCallback } from 'react';
-import CrossIcon from './icons/CrossIcon';
+import CrossIcon from '../icons/Cross';
 import { UrlObject } from 'url';
 import { getFirstProductURL } from '$lib/utils/getProductURLSupabase';
 

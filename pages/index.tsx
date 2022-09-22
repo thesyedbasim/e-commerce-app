@@ -1,13 +1,12 @@
 import type { NextPage } from 'next';
-import { Category } from '$lib/types/category';
-import CategorySection from 'components/homepage-comps/categories/CategorySection';
-import NewArrivalsSection from 'components/homepage-comps/products-suggestions/NewArrivalsSection';
+import Categories from '@components/homepage/categories/Categories';
+import NewArrivalsSection from '@components/homepage/NewArrivalsSection';
 
-const Home: NextPage<{ categories: Category[] }> = ({ categories }) => {
+const Home: NextPage = () => {
 	return (
 		<>
 			<div className="flex flex-col gap-y-12">
-				<CategorySection />
+				<Categories />
 				<NewArrivalsSection />
 			</div>
 		</>

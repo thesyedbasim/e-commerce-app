@@ -14,7 +14,7 @@ interface ISidebarSection {
 	items: ISiderbarItem[];
 }
 
-const SearchFiltersSidebar: React.FC = () => {
+const SearchSidebar: React.FC = () => {
 	const sidebarSections = useRef<ISidebarSection[]>([
 		{
 			heading: 'Relevence',
@@ -37,7 +37,7 @@ const SearchFiltersSidebar: React.FC = () => {
 	);
 };
 
-export default SearchFiltersSidebar;
+export default SearchSidebar;
 
 function SidebarSection({
 	sidebarSection

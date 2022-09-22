@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
 import ProductVariantItem from './ProductVariantItem';
 
-const ProductVariantsContainer: React.FC<{
+const ProductVariants: React.FC<{
 	product: Product;
 	setVariants: Dispatch<SetStateAction<SelectedVariant[]>>;
 }> = ({ product, setVariants }) => {
@@ -60,4 +60,4 @@ const ProductVariantsContainer: React.FC<{
 	);
 };
 
-export default ProductVariantsContainer;
+export default ProductVariants;
