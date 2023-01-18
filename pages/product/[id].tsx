@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { supabase } from '$lib/supabase';
@@ -12,7 +12,19 @@ import { useRouter } from 'next/router';
 import ProductImages from '@components/product/ProductImages';
 import ProductDetails from '@components/product/ProductDetails';
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+	const getAllProductPaths = async () => {
+		const { data } = await supabase.from('products').select(`*, seller (*)`);
+
+		return data?.map((product) => ({ params: { id: product.id } })) || [];
+	};
+
+	const paths = await getAllProductPaths();
+
+	return { paths, fallback: false };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
 	const id = params!.id;
 
 	const getProductInfo = async () => {
@@ -98,7 +110,7 @@ const ProductPage: NextPage<{ product: any }> = ({ product }) => {
 
 	return (
 		<>
-			<div className="grid grid-cols-[1.75fr_1fr] gap-10">
+			<div className="grid grid-cols-[1fr_1fr] gap-10">
 				<ProductImages product={product} />
 				<ProductDetails product={product} />
 			</div>
