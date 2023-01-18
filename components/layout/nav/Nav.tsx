@@ -96,7 +96,11 @@ const Navbar: React.FC = () => {
 									</Link>
 								</li>
 								<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
-									<WishlistIcon />
+									<Link href="/wishlist" passHref>
+										<div className="">
+											<WishlistIcon />
+										</div>
+									</Link>
 								</li>
 								<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
 									<ProfileIcon />

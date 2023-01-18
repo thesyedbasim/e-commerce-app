@@ -12,7 +12,8 @@ const ProductImages: React.FC<{ product: Product }> = ({ product }) => {
 	);
 
 	return (
-		<section className="grid grid-cols-[6rem_1fr] gap-3">
+		<section className="grid grid-cols-[1fr]">
+			{/*
 			<aside className="space-y-3">
 				{productsURLs?.map((productURL) => (
 					<figure
@@ -22,7 +23,7 @@ const ProductImages: React.FC<{ product: Product }> = ({ product }) => {
 						<img src={productURL as string} />
 					</figure>
 				))}
-			</aside>
+				</aside> */}
 			<figure className="aspect-square bg-gray-100 flex justify-center items-center p-5">
 				<img src={getFirstProductURL(product.id)} alt={product.name} />
 			</figure>

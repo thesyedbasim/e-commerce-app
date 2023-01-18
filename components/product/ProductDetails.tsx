@@ -3,13 +3,12 @@ import { SelectedVariant } from '$lib/types/cart';
 import { Product } from '$lib/types/product';
 import { addItemToCart } from '$store/cartSlice';
 import { useAppDispatch } from 'app/hooks';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ProductReviews from './ProductReviews';
 import ProductVariants from './ProductVariants';
+import ProductWishlistButton from './ProductWishlistButton';
 
 const ProductDetails: React.FC<{ product: Product }> = ({ product }) => {
-	const router = useRouter();
 	const dispatch = useAppDispatch();
 
 	const [qty, setQty] = useState<number>(1);
@@ -43,7 +42,7 @@ const ProductDetails: React.FC<{ product: Product }> = ({ product }) => {
 			<div className="">
 				<p>{product.description}</p>
 			</div>
-			<div className="grid grid-cols-[5rem_1fr] gap-4">
+			<div className="grid grid-cols-[5rem_4rem_1fr] gap-4">
 				<input
 					type="number"
 					name="quantity"
@@ -56,6 +55,7 @@ const ProductDetails: React.FC<{ product: Product }> = ({ product }) => {
 					}}
 					className="border-2 border-gray-300 focus:outline-none hover:border-gray-400 focus:border-gray-400 text-xl font-semibold p-4"
 				/>
+				<ProductWishlistButton productId={product.id} fetchIsInWishlist />
 				<button
 					className="py-4 font-semibold uppercase bg-black hover:bg-gray-800 text-white w-full text-md"
 					onClick={addToCart}

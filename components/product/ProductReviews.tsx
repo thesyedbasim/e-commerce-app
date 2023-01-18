@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { supabase } from '$lib/supabase';
 import { Product } from '$lib/types/product';
-import { addReview } from '$store/reviewSlice';
-import { useAppDispatch } from 'app/hooks';
-import { useState } from 'react';
+import { addReview, getAllReviewsOfProduct } from '$store/reviewSlice';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+
+import ReviewItem from '@components/review/reviewItem';
 
 const ProductReviews: React.FC<{ productId: Product['id'] }> = ({
 	productId
@@ -10,6 +12,8 @@ const ProductReviews: React.FC<{ productId: Product['id'] }> = ({
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [rating, setRating] = useState(5);
+
+	const reviews = useAppSelector(getAllReviewsOfProduct(productId));
 
 	const dispatch = useAppDispatch();
 
@@ -102,6 +106,10 @@ const ProductReviews: React.FC<{ productId: Product['id'] }> = ({
 					className="cursor-pointer py-4 font-semibold uppercase bg-black hover:bg-gray-800 text-white w-full text-md resize-none"
 				/>
 			</form>
+
+			{reviews.map((review) => (
+				<ReviewItem key={review.id} review={review} />
+			))}
 		</div>
 	);
 };

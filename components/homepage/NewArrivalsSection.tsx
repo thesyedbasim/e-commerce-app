@@ -21,7 +21,7 @@ const NewArrivalsSection: React.FC = () => {
 	return (
 		<section className="space-y-5">
 			<h2 className="text-3xl font-bold">New arrivals</h2>
-			<div className="grid grid-cols-3 gap-4">
+			<div className="grid grid-cols-4 gap-6">
 				{isFetching ? (
 					<Loader />
 				) : (
