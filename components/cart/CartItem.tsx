@@ -18,6 +18,19 @@ const CartItem: React.FC<{
 
 	const dispatch = useAppDispatch();
 
+	const updateQuantityLocal = (itemId: Cart['id'], qty: Cart['quantity']) => {
+		const cartItems = JSON.parse(
+			localStorage.getItem('cart') || JSON.stringify([])
+		) as Cart[];
+
+		cartItems[cartItems.findIndex((cartItem) => cartItem.id === itemId)] = {
+			...cartItem,
+			quantity: qty
+		};
+
+		localStorage.setItem('cart', JSON.stringify(cartItems));
+	};
+
 	const updateQuantityDB = async (
 		itemId: Cart['id'],
 		qty: Cart['quantity']
@@ -52,27 +65,39 @@ const CartItem: React.FC<{
 	);
 
 	const updateQuantity = (itemId: Cart['id'], qty: Cart['quantity']) => {
-		updateQuantityHandler(itemId, qty);
+		if (!user) updateQuantityLocal(itemId, qty);
+		else updateQuantityHandler(itemId, qty);
 
 		dispatch(updateCartItemQuantity({ itemId, qty }));
 	};
 
+	const deleteCartItemLocal = (cartItemId: Cart['id']) => {
+		let cartItems = JSON.parse(
+			localStorage.getItem('cart') || JSON.stringify([])
+		) as Cart[];
+
+		cartItems = cartItems.filter((cartItem) => cartItem.id !== cartItemId);
+
+		localStorage.setItem('cart', JSON.stringify(cartItems));
+	};
+
 	const deleteCartItem = async (cartItemId: number) => {
-		if (!user) return;
+		if (!user) deleteCartItemLocal(cartItemId);
+		else {
+			const { error: sbError } = await supabase
+				.from('cart')
+				.delete({ returning: 'minimal' })
+				.eq('id', cartItemId)
+				.eq('user', user.id);
 
-		const { error: sbError } = await supabase
-			.from('cart')
-			.delete({ returning: 'minimal' })
-			.eq('id', cartItemId)
-			.eq('user', user.id);
+			if (sbError) {
+				console.error(
+					'There was some problem removing that item from cart.',
+					sbError
+				);
 
-		if (sbError) {
-			console.error(
-				'There was some problem removing that item from cart.',
-				sbError
-			);
-
-			return;
+				return;
+			}
 		}
 
 		dispatch(removeItemFromCart({ cartItemId }));
