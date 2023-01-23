@@ -5,7 +5,7 @@ const ProfileIcon: React.FC = () => {
 			className="w-6"
 			viewBox="0 0 512 512"
 		>
-			<title>Person</title>
+			<title>Profile</title>
 			<path
 				d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z"
 				fill="none"

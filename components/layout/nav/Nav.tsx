@@ -15,6 +15,7 @@ import SearchBar from '@components/search/SearchBar';
 import CartIcon from '@icons/Cart';
 import ProfileIcon from '@icons/Profile';
 import WishlistIcon from '@icons/Wishlist';
+import OrderIcon from '@components/icons/Order';
 
 const Navbar: React.FC = () => {
 	const dispatch = useAppDispatch();
@@ -25,7 +26,14 @@ const Navbar: React.FC = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
+	const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(false);
+
 	let user = supabase.auth.user();
+
+	useEffect(() => {
+		if (!user) setIsUserLoggedIn(false);
+		else setIsUserLoggedIn(true);
+	}, [user]);
 
 	const fetchAndSetCartItems = async () => {
 		if (!user) return;
@@ -64,17 +72,17 @@ const Navbar: React.FC = () => {
 						<ul className={classNames(styles['nav-links-container'])}>
 							<li className="mx-4">
 								<Link href="/" passHref={true}>
-									<a className="nav-link hover:text-white">Home</a>
+									<a className="nav-link hover:text-gray-400">Home</a>
 								</Link>
 							</li>
 							<li className="mx-4">
 								<Link href="/search/featured" passHref={true}>
-									<a className="nav-link hover:text-white">Featured</a>
+									<a className="nav-link hover:text-gray-400">Featured</a>
 								</Link>
 							</li>
 							<li className="mx-4">
 								<Link href="/search/new-arrivals" passHref={true}>
-									<a className="nav-link hover:text-white">New Arrivals</a>
+									<a className="nav-link hover:text-gray-400">New Arrivals</a>
 								</Link>
 							</li>
 						</ul>
@@ -95,16 +103,36 @@ const Navbar: React.FC = () => {
 										</div>
 									</Link>
 								</li>
-								<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
-									<Link href="/wishlist" passHref>
-										<div className="">
-											<WishlistIcon />
-										</div>
-									</Link>
-								</li>
-								<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
-									<ProfileIcon />
-								</li>
+								{isUserLoggedIn && (
+									<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
+										<Link href="/cart" passHref>
+											<div className="relative">
+												<OrderIcon />
+											</div>
+										</Link>
+									</li>
+								)}
+								{isUserLoggedIn && (
+									<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
+										<Link href="/wishlist" passHref>
+											<div className="">
+												<WishlistIcon />
+											</div>
+										</Link>
+									</li>
+								)}
+								{isUserLoggedIn && (
+									<li className="mx-4 text-white hover:scale-110 active:scale-95 cursor-pointer">
+										<ProfileIcon />
+									</li>
+								)}
+								{!isUserLoggedIn && (
+									<li className="mx-4">
+										<Link href="/login" passHref={true}>
+											<a className="nav-link hover:text-gray-400">Login</a>
+										</Link>
+									</li>
+								)}
 							</ul>
 						</nav>
 					</div>
