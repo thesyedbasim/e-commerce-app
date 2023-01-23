@@ -60,10 +60,10 @@ const Signup: NextPage = () => {
 
 	return (
 		<>
-			<div className="d-flex justify-content-center row">
-				<div className="card col-10 col-md-6">
-					<div className="card-body">
-						<h1 className="card-title">Create new account</h1>
+			<div className="h-screen flex justify-center items-start pt-36">
+				<div className="grid gap-8">
+					<h1 className="text-2xl font-bold">Create new account</h1>
+					<div className="">
 						<form
 							className="form"
 							onSubmit={(e) => {
@@ -71,43 +71,45 @@ const Signup: NextPage = () => {
 								signUpUser();
 							}}
 						>
-							<div className="form-group">
-								<label htmlFor="email">Email</label>
+							<div className="grid gap-3">
+								<div className="flex flex-col">
+									<label htmlFor="email">Email</label>
+									<input
+										className="bg-gray-100 w-72 py-1 px-2 focus:outline-none focus:border-black"
+										id="email"
+										type="email"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+									/>
+								</div>
+								<div className="flex flex-col">
+									<label htmlFor="password">Password</label>
+									<input
+										className="bg-gray-100 w-72 py-1 px-2 focus:outline-none focus:border-black"
+										id="password"
+										type="password"
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+									/>
+								</div>
+								<div className="flex flex-col">
+									<label htmlFor="password">Confirm password</label>
+									<input
+										className="bg-gray-100 w-72 py-1 px-2 focus:outline-none focus:border-black"
+										id="passwordConfirm"
+										type="password"
+										value={passwordConfirm}
+										onChange={(e) => setPasswordConfirm(e.target.value)}
+									/>
+								</div>
+								<p className="">{error}</p>
 								<input
-									className="form-control"
-									id="email"
-									type="email"
-									value={email}
-									onChange={(e) => setEmail(e.target.value)}
+									type="submit"
+									className="py-2 px-8 w-36 cursor-pointer font-semibold uppercase bg-black hover:bg-gray-800 text-white text-sm"
+									disabled={!isFormValid && !!error}
+									value="Sign up"
 								/>
 							</div>
-							<div className="form-group">
-								<label htmlFor="password">Password</label>
-								<input
-									className="form-control"
-									id="password"
-									type="password"
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
-								/>
-							</div>
-							<div className="form-group">
-								<label htmlFor="password-confirm">Confirm Password</label>
-								<input
-									className="form-control"
-									id="password-confirm"
-									type="password"
-									value={passwordConfirm}
-									onChange={(e) => setPasswordConfirm(e.target.value)}
-								/>
-							</div>
-							<p className="text-danger">{error}</p>
-							<input
-								type="submit"
-								className="btn btn-primary"
-								disabled={!isFormValid && !error}
-								value="Sign up"
-							/>
 						</form>
 					</div>
 				</div>

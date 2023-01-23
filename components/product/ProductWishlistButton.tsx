@@ -24,7 +24,7 @@ const fetchIsProductInWishlist = async (productId: Product['id']) => {
 
 	if (error) throw error;
 
-	return data.length > 0 ? true : false;
+	return (data || []).length > 0 ? true : false;
 };
 
 const ProductWishlistButton: React.FC<{
