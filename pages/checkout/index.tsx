@@ -6,6 +6,13 @@ import axios, { AxiosError } from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '../../components/checkout/CheckoutForm';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import {
+	getAllCartItems,
+	setCartItems,
+	setCartItemsFetchStatus
+} from '$store/cartSlice';
+import { Cart } from '$lib/types/cart';
 
 const stripePromise = loadStripe(
 	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -13,8 +20,13 @@ const stripePromise = loadStripe(
 
 const CheckoutPage: NextPage = () => {
 	const router = useRouter();
+	const dispatch = useAppDispatch();
 
-	const DEFAULT_CHECKOUT_METHOD = 'CART';
+	const userCart = useAppSelector(getAllCartItems);
+
+	const user = supabase.auth.user();
+
+	const CHECKOUT_METHOD = !user ? 'CART_LOCAL' : 'CART_DB';
 
 	const [clientSecret, setClientSecret] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -24,17 +36,20 @@ const CheckoutPage: NextPage = () => {
 		const userUid = supabase.auth.user()?.id;
 
 		if (!userUid) {
-			router.replace('/');
+			const cartItems = JSON.parse(
+				localStorage.getItem('cart') || JSON.stringify([])
+			) as Cart[];
 
-			return;
+			dispatch(setCartItems(cartItems as Cart[]));
+			dispatch(setCartItemsFetchStatus('FETCHED'));
 		}
 
 		axios
 			.post(
 				'/api/stripe/payment-intents',
-				{},
+				{ userCart },
 				{
-					headers: { userUid, orderMethod: DEFAULT_CHECKOUT_METHOD }
+					headers: { userUid: userUid || 'false', orderMethod: CHECKOUT_METHOD }
 				}
 			)
 			.then((res) => {

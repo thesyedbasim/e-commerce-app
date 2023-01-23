@@ -24,7 +24,16 @@ const Cart: NextPage = () => {
 	let user = supabase.auth.user();
 
 	const fetchAndSetCartItems = async () => {
-		if (!user) return;
+		if (!user) {
+			const cartItems = JSON.parse(
+				localStorage.getItem('cart') || JSON.stringify([])
+			) as Cart[];
+
+			dispatch(setCartItems(cartItems as Cart[]));
+			dispatch(setCartItemsFetchStatus('FETCHED'));
+
+			return;
+		}
 
 		setIsLoading(true);
 

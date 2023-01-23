@@ -11,16 +11,22 @@ const CheckoutSuccessPage: NextPage = () => {
 
 	useEffect(() => {
 		(async () => {
-			if (!user) return;
+			if (!user) {
+				localStorage.removeItem('cart');
 
-			const { error } = await supabase
-				.from('cart')
-				.delete({ returning: 'minimal' })
-				.eq('user_id', user.id);
+				dispatch(setCartItems([]));
 
-			if (error) return;
+				return;
+			} else {
+				const { error } = await supabase
+					.from('cart')
+					.delete({ returning: 'minimal' })
+					.eq('user_id', user.id);
 
-			dispatch(setCartItems([]));
+				if (error) return;
+
+				dispatch(setCartItems([]));
+			}
 		})();
 	}, []);
 

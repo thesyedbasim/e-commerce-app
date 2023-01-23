@@ -1,5 +1,5 @@
 import { supabase } from '$lib/supabase';
-import { SelectedVariant } from '$lib/types/cart';
+import { Cart, SelectedVariant } from '$lib/types/cart';
 import { Product } from '$lib/types/product';
 import { addItemToCart } from '$store/cartSlice';
 import { useAppDispatch } from 'app/hooks';
@@ -14,7 +14,34 @@ const ProductDetails: React.FC<{ product: Product }> = ({ product }) => {
 	const [qty, setQty] = useState<number>(1);
 	const [variants, setVariants] = useState<SelectedVariant[]>([]);
 
+	const user = supabase.auth.user();
+
 	const addToCart = async () => {
+		if (!user) {
+			// get cart last item id, then next item's id increments by 1
+			const localStorageCartItems = JSON.parse(
+				localStorage.getItem('cart') || JSON.stringify([])
+			) as Cart[];
+			const prevItemId =
+				localStorageCartItems[localStorageCartItems.length - 1]?.id || 0;
+
+			localStorage.setItem(
+				'cart',
+				JSON.stringify([
+					...localStorageCartItems,
+					{ id: prevItemId + 1, product, quantity: qty, variants }
+				])
+			);
+
+			dispatch(
+				addItemToCart({ id: prevItemId + 1, product, quantity: qty, variants })
+			);
+
+			return;
+		}
+
+		console.log('user logged in');
+
 		const { data, error: sbError } = await supabase
 			.from('cart')
 			.insert({ product: product.id, quantity: qty, variants })
