@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { supabase } from '$lib/supabase';
 import axios, { AxiosError } from 'axios';
@@ -13,13 +12,13 @@ import {
 	setCartItemsFetchStatus
 } from '$store/cartSlice';
 import { Cart } from '$lib/types/cart';
+import CartItemCheckout from '@components/checkout/CartItemCheckout';
 
 const stripePromise = loadStripe(
 	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
 const CheckoutPage: NextPage = () => {
-	const router = useRouter();
 	const dispatch = useAppDispatch();
 
 	const userCart = useAppSelector(getAllCartItems);
@@ -31,6 +30,8 @@ const CheckoutPage: NextPage = () => {
 	const [clientSecret, setClientSecret] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
+	const [cartError, setCartError] = useState<string>('');
+	const [subtotal, setSubtotal] = useState<number>(0);
 
 	useEffect(() => {
 		const userUid = supabase.auth.user()?.id;
@@ -42,6 +43,14 @@ const CheckoutPage: NextPage = () => {
 
 			dispatch(setCartItems(cartItems as Cart[]));
 			dispatch(setCartItemsFetchStatus('FETCHED'));
+
+			setSubtotal(
+				userCart.reduce(
+					(total, cartItem) =>
+						total + cartItem.product.price * cartItem.quantity,
+					0
+				)
+			);
 		}
 
 		axios
@@ -67,16 +76,67 @@ const CheckoutPage: NextPage = () => {
 
 	return (
 		<>
-			<div className="d-flex justify-content-center row">
-				<div className="card col-10 col-md-8">
-					<div className="card-body">
-						<h1 className="card-title mb-3">Checkout</h1>
-						{error && <p>{error}</p>}
-						{!error && clientSecret && (
-							<Elements stripe={stripePromise} options={{ clientSecret }}>
-								<CheckoutForm />
-							</Elements>
-						)}
+			<div className="grid grid-cols-[1.5fr,1fr] gap-16">
+				<div className="grid auto-rows-max gap-6">
+					<h1 className="text-2xl font-bold">Checkout</h1>
+					{error && <p>{error}</p>}
+					{!error && clientSecret && (
+						<Elements
+							stripe={stripePromise}
+							options={{
+								clientSecret,
+								appearance: {
+									rules: {
+										'.Input': {
+											borderColor: '#d1d5db',
+											borderRadius: '0',
+											borderWidth: '2px',
+											boxShadow: 'none'
+										},
+										'.Input:hover': {
+											borderColor: '#9ca3af',
+											outline: 'none'
+										},
+										'.Input:focus': {
+											borderColor: '#9ca3af',
+											outline: 'none'
+										}
+									}
+								}
+							}}
+						>
+							<CheckoutForm />
+						</Elements>
+					)}
+				</div>
+				<div className="px-12 py-12 bg-stone-50">
+					<div className="h-full w-full">
+						<div className="border-gray-100 pb-3">
+							<div className="grid grid-cols-2 items-center">
+								<p className="text-gray-400">Subtotal:</p>
+								<p className="font-bold text-lg justify-self-end">
+									${subtotal}
+								</p>
+							</div>
+						</div>
+						<div className="border-t-2 border-b-2 border-gray-200 py-3">
+							<div className="grid grid-cols-2 items-center">
+								<p className="text-gray-400">Total:</p>
+								<p className="font-bold text-2xl justify-self-end">
+									${subtotal}
+								</p>
+							</div>
+						</div>
+						<div className="mt-8">
+							{userCart.map((cartItem) => (
+								<CartItemCheckout
+									key={cartItem.id}
+									cartItem={cartItem}
+									setIsLoading={setIsLoading}
+									setError={setCartError}
+								/>
+							))}
+						</div>
 					</div>
 				</div>
 			</div>
