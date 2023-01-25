@@ -7,6 +7,7 @@ import { useState } from 'react';
 import ProductReviews from './ProductReviews';
 import ProductVariants from './ProductVariants';
 import ProductWishlistButton from './ProductWishlistButton';
+import Button from '@components/ui/Button';
 
 const ProductDetails: React.FC<{ product: Product }> = ({ product }) => {
 	const dispatch = useAppDispatch();
@@ -83,12 +84,7 @@ const ProductDetails: React.FC<{ product: Product }> = ({ product }) => {
 					className="border-2 border-gray-300 focus:outline-none hover:border-gray-400 focus:border-gray-400 text-xl font-semibold p-4"
 				/>
 				<ProductWishlistButton productId={product.id} fetchIsInWishlist />
-				<button
-					className="py-4 font-semibold uppercase bg-black hover:bg-gray-800 text-white w-full text-md"
-					onClick={addToCart}
-				>
-					Add to cart
-				</button>
+				<Button text="Add to cart" functions={{ onClick: addToCart }} />
 			</div>
 			<details className="p-6 border-y-2 cursor-pointer transition-all">
 				<summary className="list-none relative after:content-[''] after:inline-block after:border-r-4 after:border-b-4 after:p-1 after:border-black after:rotate-45 after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:transition-all">

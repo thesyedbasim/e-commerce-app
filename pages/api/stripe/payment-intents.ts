@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+
 import { initStripe } from '$lib/stripe';
 import { getServiceSupabase } from '$lib/supabase';
-import { Cart } from '$lib/types/cart';
-import { Product } from '$lib/types/product';
+import type { Cart } from '$lib/types/cart';
 
 const stripe = initStripe();
 const supabaseService = getServiceSupabase();
@@ -10,26 +10,24 @@ const supabaseService = getServiceSupabase();
 const createPaymentIntent = async ({
 	amount,
 	customerId,
-	userUid = null,
-	products
+	userUid = null
 }: {
 	amount: number;
 	customerId?: string;
 	userUid?: string | null;
-	products: any[];
 }) => {
 	const paymentIntent = await stripe.paymentIntents.create({
 		amount,
 		currency: 'usd',
 		automatic_payment_methods: { enabled: true },
 		customer: customerId,
-		metadata: { userUid, products: JSON.stringify(products) }
+		metadata: { userUid }
 	});
 
 	return paymentIntent;
 };
 
-const getUserCart = async (userUid: string) => {
+const fetchUserCart = async (userUid: string) => {
 	const { data, error } = await supabaseService
 		.from('cart')
 		.select('*, product (id, name, price)')
@@ -51,66 +49,16 @@ const getCartTotal = (cart: any[]) => {
 	return cartTotal;
 };
 
-const getProducts = async (cartItems: Cart[]) => {
-	const products = await Promise.all(
-		cartItems.map(async (cartItem) => {
-			const { data, error } = await supabaseService
-				.from('products')
-				.select('id, name, price')
-				.eq('id', cartItem.product.id)
-				.single();
-
-			if (error) throw error;
-
-			return { qty: cartItem.quantity, product: data };
-		})
-	);
-
-	return products;
-};
-
-const getProductsTotal = (
-	cartItems: {
-		qty: Cart['quantity'];
-		product: {
-			id: Product['id'];
-			name: Product['name'];
-			price: Product['price'];
-		};
-	}[]
-) => {
-	const cartTotal = +cartItems
-		.reduce(
-			(total, cartItem) => total + cartItem.product.price * cartItem.qty,
-			0
-		)
-		.toFixed(2);
-
-	return cartTotal;
-};
-
-const getCartProducts = (cart: Cart[]) => {
-	const cartProducts = cart.map((cartItem) => ({
-		id: cartItem.product.id,
-		name: cartItem.product.name,
-		price: cartItem.product.price,
-		quantity: cartItem.quantity,
-		variantsSelected: cartItem.variants
-	}));
-
-	return cartProducts;
-};
-
-const getUserCustomer = async (id: string) => {
+const getUserStripeCustomerId = async (userUid: string) => {
 	const { data, error } = await supabaseService
 		.from('users')
 		.select('stripeCustomer')
-		.eq('uid', id)
+		.eq('uid', userUid)
 		.single();
 
 	if (error) throw error;
 
-	return data.stripeCustomer;
+	return (data.stripeCustomer as string) || undefined;
 };
 
 const PaymentIntents = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -133,67 +81,42 @@ const PaymentIntents = async (req: NextApiRequest, res: NextApiResponse) => {
 
 	const SHIPPING_COST = 5;
 	const SHIPPING_TRESHOLD_AMOUNT = 50;
-	let subtotalAmount: number;
 
-	if (!userUid && orderMethod === 'CART_LOCAL') {
-		const userCartReq = req.body as { userCart: Cart[] };
+	const getIsShippingCostRequired = (subtotalAmount: number) =>
+		subtotalAmount < SHIPPING_TRESHOLD_AMOUNT;
 
-		const userCart = userCartReq.userCart;
+	const getShippingAmount = (isShippingCostRequired: boolean) => {
+		return isShippingCostRequired ? SHIPPING_COST : 0;
+	};
 
-		if (userCart.length === 0)
-			return res.status(400).json({ message: 'User cart is empty.' });
+	const getTotalAmount = (subtotalAmount: number, shippingAmount: number) => {
+		return subtotalAmount + shippingAmount;
+	};
 
-		subtotalAmount = +getCartTotal(userCart).toFixed(2);
+	let stripeCustomer: string | undefined;
+	if (userUid)
+		stripeCustomer = await getUserStripeCustomerId(userUid as string);
 
-		const isShippingAmountRequired = subtotalAmount < SHIPPING_TRESHOLD_AMOUNT;
-
-		const totalAmount = +(
-			isShippingAmountRequired ? subtotalAmount + SHIPPING_COST : subtotalAmount
-		).toFixed(2);
-		const shippingAmount = isShippingAmountRequired ? SHIPPING_COST : 0;
-
-		const cartProducts = getCartProducts(userCart);
-
-		const paymentIntent = await createPaymentIntent({
-			amount: subtotalAmount * 100,
-			products: cartProducts
-		});
-
-		return res
-			.status(201)
-			.json({
-				clientSecret: paymentIntent.client_secret,
-				payment: {
-					subtotal: subtotalAmount,
-					shipping: shippingAmount,
-					total: totalAmount
-				}
-			});
-	}
-
-	const stripeCustomer = await getUserCustomer(userUid as string);
-
-	const userCart = await getUserCart(userUid as string);
+	const userCart = userUid
+		? await fetchUserCart(userUid as string)
+		: (req.body.userCart as Cart[]);
 
 	if (userCart.length === 0)
 		return res.status(400).json({ message: 'User cart is empty.' });
 
-	subtotalAmount = +getCartTotal(userCart).toFixed(2);
+	const subtotalAmount = +getCartTotal(userCart).toFixed(2);
 
-	const isShippingAmountRequired = subtotalAmount < SHIPPING_TRESHOLD_AMOUNT;
-
-	const totalAmount = +(
-		isShippingAmountRequired ? subtotalAmount + SHIPPING_COST : subtotalAmount
-	).toFixed(2);
-	const shippingAmount = isShippingAmountRequired ? SHIPPING_COST : 0;
-
-	const cartProducts = getCartProducts(userCart);
+	const shippingAmount = getShippingAmount(
+		getIsShippingCostRequired(subtotalAmount)
+	);
+	const totalAmount = +getTotalAmount(subtotalAmount, shippingAmount).toFixed(
+		2
+	);
 
 	const paymentIntent = await createPaymentIntent({
 		amount: subtotalAmount * 100,
 		customerId: stripeCustomer,
-		userUid: userUid as string,
-		products: cartProducts
+		userUid: userUid as string
 	});
 
 	return res.status(201).json({
