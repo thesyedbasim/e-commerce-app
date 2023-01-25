@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import {
 	getCartItemsFetchStatus,
 	getNumOfItemsInCart,

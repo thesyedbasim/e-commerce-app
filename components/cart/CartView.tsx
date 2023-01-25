@@ -1,6 +1,9 @@
 import { useRouter } from 'next/router';
 import { getAllCartItems, getTotalCartPrice } from '$store/cartSlice';
-import { useAppSelector } from 'app/hooks';
+
+import { useAppDispatch, useAppSelector } from 'lib/hooks';
+import Link from 'next/link';
+
 import CartItem from './CartItem';
 import Button from '@components/ui/Button';
 

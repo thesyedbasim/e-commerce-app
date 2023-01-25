@@ -1,6 +1,6 @@
 import { supabase } from '$lib/supabase';
 import { addOrder, getOrderById } from '$store/orderSlice';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'lib/hooks';
 import Loader from '@components/misc/Loading';
 import OrderProductItem from '@components/order/OrderProductItem';
 import type { NextPage } from 'next';

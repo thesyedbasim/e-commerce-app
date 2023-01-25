@@ -2,7 +2,7 @@ import { supabase } from '$lib/supabase';
 import { Cart, SelectedVariant } from '$lib/types/cart';
 import { Product } from '$lib/types/product';
 import { addItemToCart } from '$store/cartSlice';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch } from 'lib/hooks';
 import { useState } from 'react';
 import ProductReviews from './ProductReviews';
 import ProductVariants from './ProductVariants';

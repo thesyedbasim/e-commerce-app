@@ -8,7 +8,7 @@ import {
 	setCartItems,
 	setCartItemsFetchStatus
 } from '$store/cartSlice';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'lib/hooks';
 import classNames from 'classnames';
 import Link from 'next/link';
 import SearchBar from '@components/search/SearchBar';

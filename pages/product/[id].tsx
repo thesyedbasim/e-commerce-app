@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { supabase } from '$lib/supabase';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import {
 	addReview,
 	getAllReviewsOfProduct,

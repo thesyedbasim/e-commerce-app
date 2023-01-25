@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import { getAllOrders, setOrders } from '../../store/orderSlice';
 import { supabase } from '$lib/supabase';
 import { Order } from '$lib/types/order';
