@@ -36,7 +36,7 @@ const CheckoutForm: React.FC = () => {
 
 	return (
 		<form
-			id="payment-form"
+			className="w-full grid gap-6"
 			onSubmit={(e) => {
 				e.preventDefault();
 				handlePayment();
@@ -44,7 +44,7 @@ const CheckoutForm: React.FC = () => {
 		>
 			<PaymentElement id="payment-element" />
 			<button
-				className="btn btn-primary mt-3"
+				className="py-4 font-semibold uppercase bg-black hover:bg-gray-800 text-white text-md"
 				disabled={!stripe || !elements || isLoading}
 			>
 				{isLoading ? 'loading...' : 'Pay now'}

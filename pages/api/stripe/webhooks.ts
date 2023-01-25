@@ -7,7 +7,7 @@ import { createOrder } from './orders';
 export const config = { api: { bodyParser: false } };
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-	apiVersion: '2020-08-27'
+	apiVersion: '2022-11-15'
 });
 
 const StripeWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
