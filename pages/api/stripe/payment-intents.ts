@@ -131,7 +131,9 @@ const PaymentIntents = async (req: NextApiRequest, res: NextApiResponse) => {
 			.status(401)
 			.json({ message: 'Please authenticate before checkout.' });
 
-	let totalAmount: number;
+	const SHIPPING_COST = 5;
+	const SHIPPING_TRESHOLD_AMOUNT = 50;
+	let subtotalAmount: number;
 
 	if (!userUid && orderMethod === 'CART_LOCAL') {
 		const userCartReq = req.body as { userCart: Cart[] };
@@ -141,16 +143,32 @@ const PaymentIntents = async (req: NextApiRequest, res: NextApiResponse) => {
 		if (userCart.length === 0)
 			return res.status(400).json({ message: 'User cart is empty.' });
 
-		totalAmount = getCartTotal(userCart);
+		subtotalAmount = +getCartTotal(userCart).toFixed(2);
+
+		const isShippingAmountRequired = subtotalAmount < SHIPPING_TRESHOLD_AMOUNT;
+
+		const totalAmount = +(
+			isShippingAmountRequired ? subtotalAmount + SHIPPING_COST : subtotalAmount
+		).toFixed(2);
+		const shippingAmount = isShippingAmountRequired ? SHIPPING_COST : 0;
 
 		const cartProducts = getCartProducts(userCart);
 
 		const paymentIntent = await createPaymentIntent({
-			amount: +(totalAmount * 100).toFixed(2),
+			amount: subtotalAmount * 100,
 			products: cartProducts
 		});
 
-		return res.status(201).json({ clientSecret: paymentIntent.client_secret });
+		return res
+			.status(201)
+			.json({
+				clientSecret: paymentIntent.client_secret,
+				payment: {
+					subtotal: subtotalAmount,
+					shipping: shippingAmount,
+					total: totalAmount
+				}
+			});
 	}
 
 	const stripeCustomer = await getUserCustomer(userUid as string);
@@ -160,18 +178,32 @@ const PaymentIntents = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (userCart.length === 0)
 		return res.status(400).json({ message: 'User cart is empty.' });
 
-	totalAmount = getCartTotal(userCart);
+	subtotalAmount = +getCartTotal(userCart).toFixed(2);
+
+	const isShippingAmountRequired = subtotalAmount < SHIPPING_TRESHOLD_AMOUNT;
+
+	const totalAmount = +(
+		isShippingAmountRequired ? subtotalAmount + SHIPPING_COST : subtotalAmount
+	).toFixed(2);
+	const shippingAmount = isShippingAmountRequired ? SHIPPING_COST : 0;
 
 	const cartProducts = getCartProducts(userCart);
 
 	const paymentIntent = await createPaymentIntent({
-		amount: +(totalAmount * 100).toFixed(2),
+		amount: subtotalAmount * 100,
 		customerId: stripeCustomer,
 		userUid: userUid as string,
 		products: cartProducts
 	});
 
-	return res.status(201).json({ clientSecret: paymentIntent.client_secret });
+	return res.status(201).json({
+		clientSecret: paymentIntent.client_secret,
+		payment: {
+			subtotal: subtotalAmount,
+			shipping: shippingAmount,
+			total: totalAmount
+		}
+	});
 };
 
 export default PaymentIntents;

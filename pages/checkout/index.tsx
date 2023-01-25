@@ -13,6 +13,7 @@ import {
 } from '$store/cartSlice';
 import { Cart } from '$lib/types/cart';
 import CartItemCheckout from '@components/checkout/CartItemCheckout';
+import { useQuery } from '@tanstack/react-query';
 
 const stripePromise = loadStripe(
 	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -25,13 +26,33 @@ const CheckoutPage: NextPage = () => {
 
 	const user = supabase.auth.user();
 
+	const fetchAllCartItems = async () => {
+		if (!user) return [];
+
+		const { data } = await supabase
+			.from('cart')
+			.select('*, product(*)')
+			.eq('user', user.id);
+
+		return data || [];
+	};
+
+	const {
+		data: cartData,
+		isLoading: isLoadingDb,
+		isError: isErrorDb
+	} = useQuery(['cart'], fetchAllCartItems);
+
 	const CHECKOUT_METHOD = !user ? 'CART_LOCAL' : 'CART_DB';
 
 	const [clientSecret, setClientSecret] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
 	const [cartError, setCartError] = useState<string>('');
+
 	const [subtotal, setSubtotal] = useState<number>(0);
+	const [shipping, setShipping] = useState<number>(0);
+	const [total, setTotal] = useState<number>(0);
 
 	useEffect(() => {
 		const userUid = supabase.auth.user()?.id;
@@ -43,14 +64,11 @@ const CheckoutPage: NextPage = () => {
 
 			dispatch(setCartItems(cartItems as Cart[]));
 			dispatch(setCartItemsFetchStatus('FETCHED'));
+		} else {
+			if (isLoadingDb || isErrorDb) return;
 
-			setSubtotal(
-				userCart.reduce(
-					(total, cartItem) =>
-						total + cartItem.product.price * cartItem.quantity,
-					0
-				)
-			);
+			dispatch(setCartItems(cartData as Cart[]));
+			dispatch(setCartItemsFetchStatus('FETCHED'));
 		}
 
 		axios
@@ -63,6 +81,9 @@ const CheckoutPage: NextPage = () => {
 			)
 			.then((res) => {
 				setClientSecret(res.data.clientSecret);
+				setSubtotal(res.data.payment.subtotal);
+				setShipping(res.data.payment.shipping);
+				setTotal(res.data.payment.total);
 				console.log(res.data);
 			})
 			.catch((err: AxiosError) => {
@@ -72,7 +93,7 @@ const CheckoutPage: NextPage = () => {
 						'There was some problem in the checkout process.'
 				);
 			});
-	}, []);
+	}, [isLoadingDb, isErrorDb]);
 
 	return (
 		<>
@@ -100,6 +121,10 @@ const CheckoutPage: NextPage = () => {
 										'.Input:focus': {
 											borderColor: '#9ca3af',
 											outline: 'none'
+										},
+										'.Input:active': {
+											borderColor: '#9ca3af',
+											outline: 'none'
 										}
 									}
 								}
@@ -118,13 +143,17 @@ const CheckoutPage: NextPage = () => {
 									${subtotal}
 								</p>
 							</div>
+							<div className="grid grid-cols-2 items-center">
+								<p className="text-gray-400">Shipping:</p>
+								<p className="font-bold text-lg justify-self-end">
+									${shipping}
+								</p>
+							</div>
 						</div>
 						<div className="border-t-2 border-b-2 border-gray-200 py-3">
 							<div className="grid grid-cols-2 items-center">
 								<p className="text-gray-400">Total:</p>
-								<p className="font-bold text-2xl justify-self-end">
-									${subtotal}
-								</p>
+								<p className="font-bold text-2xl justify-self-end">${total}</p>
 							</div>
 						</div>
 						<div className="mt-8">
