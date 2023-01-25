@@ -1,13 +1,14 @@
+import { useRouter } from 'next/router';
 import { getAllCartItems, getTotalCartPrice } from '$store/cartSlice';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
-import Link from 'next/link';
+import { useAppSelector } from 'app/hooks';
 import CartItem from './CartItem';
+import Button from '@components/ui/Button';
 
 const CartView: React.FC<{
 	setIsLoading: Function;
 	setError: Function;
 }> = ({ setIsLoading, setError }) => {
-	const dispatch = useAppDispatch();
+	const router = useRouter();
 
 	const cartItems = useAppSelector(getAllCartItems);
 	const totalCartPrice = useAppSelector(getTotalCartPrice);
@@ -38,11 +39,10 @@ const CartView: React.FC<{
 						<p className="font-bold">Subtotal</p>
 						<p className="justify-self-end font-bold">${totalCartPrice}</p>
 					</div>
-					<Link href="/checkout" passHref>
-						<button className="py-4 font-semibold uppercase bg-black hover:bg-gray-800 text-white w-full text-md">
-							Checkout
-						</button>
-					</Link>
+					<Button
+						text="Checkout"
+						functions={{ onClick: () => router.push('/checkout') }}
+					/>
 				</div>
 			</div>
 		</section>

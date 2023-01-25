@@ -4,6 +4,7 @@ import {
 	useElements,
 	PaymentElement
 } from '@stripe/react-stripe-js';
+import Button from '@components/ui/Button';
 
 const CheckoutForm: React.FC = () => {
 	const stripe = useStripe();
@@ -43,12 +44,10 @@ const CheckoutForm: React.FC = () => {
 			}}
 		>
 			<PaymentElement id="payment-element" />
-			<button
-				className="py-4 font-semibold uppercase bg-black hover:bg-gray-800 text-white text-md"
-				disabled={!stripe || !elements || isLoading}
-			>
-				{isLoading ? 'loading...' : 'Pay now'}
-			</button>
+			<Button
+				text={isLoading ? 'loading...' : 'Pay now'}
+				attributes={{ disabled: !stripe || !elements || isLoading }}
+			/>
 			{message && <p>{message}</p>}
 		</form>
 	);
