@@ -6,14 +6,14 @@ const Footer: React.FC = () => {
 			<div className="copyrights-area flex justify-between">
 				<p className="text-gray-400">&copy; Copyrights reserved 2022.</p>
 				<nav className="flex gap-4 text-gray-400">
-					<Link href="/terms-of-use" passHref={true}>
-						<a className="hover:text-white">Terms of use</a>
+					<Link href="/terms-of-use" className="hover:text-white">
+						Terms of use
 					</Link>
-					<Link href="/shipping" passHref={true}>
-						<a className="hover:text-white">Shipping</a>
+					<Link href="/shipping" className="hover:text-white">
+						Shipping
 					</Link>
-					<Link href="/privacy-policy" passHref={true}>
-						<a className="hover:text-white">Privacy policy</a>
+					<Link href="/privacy-policy" className="hover:text-white">
+						Privacy policy
 					</Link>
 				</nav>
 				<div className="misc">

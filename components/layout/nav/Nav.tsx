@@ -80,18 +80,30 @@ const Navbar: React.FC = () => {
 					<div className="nav-links">
 						<ul className={classNames(styles['nav-links-container'])}>
 							<li className="mx-4">
-								<Link href="/" passHref={true}>
-									<a className="nav-link hover:text-gray-400">Home</a>
+								<Link
+									href="/"
+									passHref={true}
+									className="nav-link hover:text-gray-400"
+								>
+									Home
 								</Link>
 							</li>
 							<li className="mx-4">
-								<Link href="/search/featured" passHref={true}>
-									<a className="nav-link hover:text-gray-400">Featured</a>
+								<Link
+									href="/search/featured"
+									passHref={true}
+									className="nav-link hover:text-gray-400"
+								>
+									Featured
 								</Link>
 							</li>
 							<li className="mx-4">
-								<Link href="/search/new-arrivals" passHref={true}>
-									<a className="nav-link hover:text-gray-400">New Arrivals</a>
+								<Link
+									href="/search/new-arrivals"
+									passHref={true}
+									className="nav-link hover:text-gray-400"
+								>
+									New Arrivals
 								</Link>
 							</li>
 						</ul>
@@ -138,7 +150,7 @@ const Navbar: React.FC = () => {
 								{!isUserLoggedIn && (
 									<li className="mx-4">
 										<Link href="/login" passHref={true}>
-											<a className="nav-link hover:text-gray-400">Login</a>
+											Login
 										</Link>
 									</li>
 								)}
