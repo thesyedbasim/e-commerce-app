@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { supabase } from '$lib/supabase';
 import { Cart } from '$lib/types/cart';
 import { removeItemFromCart, updateCartItemQuantity } from '$store/cartSlice';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch } from 'lib/hooks';
 import { debounce } from 'lodash';
 import { useCallback } from 'react';
 import CrossIcon from '../icons/Cross';

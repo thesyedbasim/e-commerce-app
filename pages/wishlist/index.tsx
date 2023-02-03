@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '$lib/supabase';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'lib/hooks';
 
 import { getWishlist, setWishlist } from '$store/wishlistSlice';
 import type { Wishlist } from '$lib/types/wishlist';

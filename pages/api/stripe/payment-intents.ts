@@ -18,7 +18,7 @@ const createPaymentIntent = async ({
 }) => {
 	const paymentIntent = await stripe.paymentIntents.create({
 		amount,
-		currency: 'usd',
+		currency: 'inr',
 		automatic_payment_methods: { enabled: true },
 		customer: customerId,
 		metadata: { userUid }
@@ -79,8 +79,8 @@ const PaymentIntents = async (req: NextApiRequest, res: NextApiResponse) => {
 			.status(401)
 			.json({ message: 'Please authenticate before checkout.' });
 
-	const SHIPPING_COST = 5;
-	const SHIPPING_TRESHOLD_AMOUNT = 50;
+	const SHIPPING_COST = 99;
+	const SHIPPING_TRESHOLD_AMOUNT = 699;
 
 	const getIsShippingCostRequired = (subtotalAmount: number) =>
 		subtotalAmount < SHIPPING_TRESHOLD_AMOUNT;

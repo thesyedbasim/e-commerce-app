@@ -5,7 +5,7 @@ import axios, { AxiosError } from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '../../components/checkout/CheckoutForm';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'lib/hooks';
 import {
 	getAllCartItems,
 	setCartItems,

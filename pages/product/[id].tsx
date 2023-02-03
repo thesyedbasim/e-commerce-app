@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { supabase } from '$lib/supabase';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import {
 	addReview,
 	getAllReviewsOfProduct,
@@ -28,10 +28,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	const id = params!.id;
 
 	const getProductInfo = async () => {
-		const { data } = await supabase
-			.from('products')
-			.select(`*, seller (*)`)
-			.eq('id', id);
+		const { data } = await supabase.rpc('get_product_from_id', { id });
 
 		return data;
 	};

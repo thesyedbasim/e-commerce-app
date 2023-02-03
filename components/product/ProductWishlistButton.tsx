@@ -7,7 +7,7 @@ import type { Product } from '$lib/types/product';
 
 import WishlistIcon from '@components/icons/Wishlist';
 import classNames from 'classnames';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch } from 'lib/hooks';
 import { addWishlistItem, removeWishlistItem } from '$store/wishlistSlice';
 import { Wishlist } from '$lib/types/wishlist';
 

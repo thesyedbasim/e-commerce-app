@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { supabase } from '$lib/supabase';
 import { Product } from '$lib/types/product';
 import { addReview, getAllReviewsOfProduct } from '$store/reviewSlice';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'lib/hooks';
 
 import ReviewItem from '@components/review/reviewItem';
 
