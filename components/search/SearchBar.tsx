@@ -7,7 +7,7 @@ const SearchBar: React.FC = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 
 	return (
-		<div className="justify-self-stretch grid grid-cols-[0.75fr] justify-center">
+		<div className="justify-self-stretch grid md:grid-cols-[0.75fr] md:justify-center">
 			<form
 				className=""
 				onSubmit={(e) => {

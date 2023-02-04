@@ -18,7 +18,6 @@ const SearchProductItem: React.FC<{
 					/>
 				</figure>
 				<div className="">
-					<h4 className="text-sm">{product.seller.name}</h4>
 					<h3 className="text-lg font-bold">{product.name}</h3>
 					<p className="text-md font-bold">${product.price}</p>
 				</div>

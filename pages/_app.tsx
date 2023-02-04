@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 		<QueryClientProvider client={queryClient}>
 			<Provider store={store}>
 				<NavBar />
-				<div className="px-24 py-14">
+				<div className="px-10 md:px-24 py-14">
 					<Component {...pageProps} />
 				</div>
 				<Footer />

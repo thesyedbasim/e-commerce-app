@@ -4,10 +4,7 @@
 	}
 
 	&-content {
-		display: grid;
-		grid-template-columns: max-content 1fr max-content;
-		align-items: center;
-		justify-items: center;
+		@apply grid grid-cols-[max-content_1fr_max-content] items-center justify-items-center;
 	}
 
 	&-links-container {

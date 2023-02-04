@@ -118,9 +118,13 @@ const CartItem: React.FC<{
 
 	return (
 		<>
-			<div className="grid grid-cols-[1fr_5fr_1fr_1fr_0.25fr] gap-x-5 items-center justify-items-start">
-				<Link href={getProductLink()} passHref>
-					<figure className="bg-gray-100 p-5 aspect-square cursor-pointer">
+			<div className="grid grid-cols-[1fr_3fr_0.3fr] grid-rows-[min-content_min-content_min-content] gap-y-3 md:grid-rows-1 md:grid-cols-[1fr_5fr_1fr_1fr_0.25fr] gap-x-5 items-center justify-items-start">
+				<Link
+					href={getProductLink()}
+					passHref
+					className="row-span-3 md:row-span-1"
+				>
+					<figure className="bg-gray-100 p-1 md:p-5 aspect-square cursor-pointer">
 						<img src={getFirstProductURL(cartItem.product.id)} />
 					</figure>
 				</Link>
@@ -146,10 +150,15 @@ const CartItem: React.FC<{
 
 						updateQuantity(cartItem.id, +e.target.value);
 					}}
-					className="border-2 border-gray-300 focus:outline-none hover:border-gray-400 focus:border-gray-400 text-md font-semibold p-4 w-20"
+					className="col-start-2 md:col-start-3 col-end-3 md:col-end-4 row-start-3 md:row-start-1 row-end-4 md:row-end-2 border-2 border-gray-300 focus:outline-none hover:border-gray-400 focus:border-gray-400 text-md font-semibold p-4 w-20"
 				/>
-				<p className="text-md font-bold">${cartItem.product.price}</p>
-				<CrossIcon onClick={() => deleteCartItem(cartItem.id)} />
+				<p className="text-md font-bold col-start-2 md:col-start-4 col-end-3 md:col-end-5 row-start-2 md:row-start-1 row-end-3 md:row-end-2">
+					${cartItem.product.price}
+				</p>
+				<CrossIcon
+					onClick={() => deleteCartItem(cartItem.id)}
+					styles="row-span-3 md:row-span-1"
+				/>
 			</div>
 		</>
 	);

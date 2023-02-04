@@ -19,7 +19,7 @@ const CartView: React.FC<{
 	return (
 		<section className="">
 			<h1 className="text-3xl font-bold mb-8">My Cart</h1>
-			<div className="grid grid-cols-[1fr_5fr_1fr_1fr_0.25fr] gap-x-5 items-center justify-items-start border-b-2 border-gray-100 pb-2 mb-8">
+			<div className="hidden md:grid grid-cols-[1fr_5fr_1fr_1fr_0.25fr] gap-x-5 items-center justify-items-start border-b-2 border-gray-100 pb-2 mb-8">
 				<h2 className="text-md font-bold">Item</h2>
 				<h2 className="text-md font-bold"></h2>
 				<h2 className="text-md font-bold">Quantity</h2>
@@ -35,8 +35,8 @@ const CartView: React.FC<{
 					/>
 				))}
 			</div>
-			<div className="grid grid-cols-[6fr_3fr]">
-				<div className=""></div>
+			<div className="grid grid-cols-1 lg:grid-cols-[6fr_3fr] mt-10 lg:mt-0">
+				<div className="hidden lg:block"></div>
 				<div className="pt-5 border-t-2 border-gray-100 space-y-5">
 					<div className="grid grid-cols-2">
 						<p className="font-bold">Subtotal</p>
