@@ -60,7 +60,6 @@ const ProductDetails: React.FC<{ product: Product }> = ({ product }) => {
 	return (
 		<section className="space-y-8">
 			<div className="space-y-2">
-				<h2 className="text-md font-semibold">{product.seller.name}</h2>
 				<h1 className="text-3xl font-bold">{product.name}</h1>
 				<h3 className="text-2xl font-bold">${product.price}</h3>
 			</div>
