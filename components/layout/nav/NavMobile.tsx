@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import Link from 'next/link';
 
 import SearchBar from '@components/search/SearchBar';
 import CartIcon from '@icons/Cart';
-import { useState } from 'react';
 
 const NavMobile: React.FC<{
 	numOfItemsInCart: number;

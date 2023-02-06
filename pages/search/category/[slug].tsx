@@ -1,7 +1,7 @@
-import { GetServerSideProps } from 'next';
-import type { NextPage } from 'next';
+import type { NextPage, GetServerSideProps } from 'next';
 import { supabase } from '$lib/supabase';
 import type { ProductMinimal } from '$lib/types/product';
+
 import SearchView from '@components/search/SearchView';
 import SearchSidebar from '@components/search/SearchSidebar';
 

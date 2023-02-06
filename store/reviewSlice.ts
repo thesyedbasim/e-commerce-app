@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '.';
-import { Review } from '$lib/types/review';
+import type { Review } from '$lib/types/review';
+import { RootState } from '$store';
 
 interface InitialState {
 	error?: string;

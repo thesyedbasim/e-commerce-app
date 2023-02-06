@@ -1,9 +1,6 @@
 import Link from 'next/link';
-
+import { useAppDispatch } from '$lib/hooks';
 import { getFirstProductURL } from '$lib/utils/getProductURLSupabase';
-import { useAppDispatch } from 'lib/hooks';
-import { removeWishlistItem } from '$store/wishlistSlice';
-
 import type { ProductMinimal } from '$lib/types/product';
 import type { Wishlist } from '$lib/types/wishlist';
 

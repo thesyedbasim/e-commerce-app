@@ -1,5 +1,5 @@
-import { Category } from './category';
-import { Seller } from './seller';
+import type { Category } from '$lib/types/category';
+import type { Seller } from '$lib/types/seller';
 
 export interface ProductVariant {
 	readonly name: string;

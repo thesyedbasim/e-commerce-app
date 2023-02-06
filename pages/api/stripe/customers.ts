@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getServiceSupabase } from '$lib/supabase';
-import { User } from '$lib/types/user';
 import { initStripe } from '$lib/stripe';
+import { getServiceSupabase } from '$lib/supabase';
+import type { User } from '$lib/types/user';
 
 const stripe = initStripe();
 const supabaseService = getServiceSupabase();

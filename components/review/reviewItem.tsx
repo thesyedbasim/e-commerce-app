@@ -1,4 +1,4 @@
-import { Review } from '$lib/types/review';
+import type { Review } from '$lib/types/review';
 
 const ReviewItem: React.FC<{ review: Review }> = ({
 	review: { id, createdAt, title, description, rating, author }

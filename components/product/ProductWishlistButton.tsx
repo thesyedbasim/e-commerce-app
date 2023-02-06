@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '$lib/supabase';
-
-import type { Product } from '$lib/types/product';
-
-import WishlistIcon from '@components/icons/Wishlist';
 import classNames from 'classnames';
-import { useAppDispatch } from 'lib/hooks';
+import { supabase } from '$lib/supabase';
+import { useAppDispatch } from '$lib/hooks';
+import type { Product } from '$lib/types/product';
+import type { Wishlist } from '$lib/types/wishlist';
 import { addWishlistItem, removeWishlistItem } from '$store/wishlistSlice';
-import { Wishlist } from '$lib/types/wishlist';
+
+import WishlistIcon from '@icons/Wishlist';
 
 const fetchIsProductInWishlist = async (productId: Product['id']) => {
 	const user = supabase.auth.user();

@@ -1,5 +1,6 @@
+import type { ProductMinimal } from '$lib/types/product';
+
 import SearchProductItem from '@components/search/SearchProductItem';
-import { ProductMinimal } from '$lib/types/product';
 
 const NewArrivalsSection: React.FC<{ products: ProductMinimal[] }> = ({
 	products

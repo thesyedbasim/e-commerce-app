@@ -1,8 +1,8 @@
-import type { NextPage } from 'next';
 import { useEffect } from 'react';
+import type { NextPage } from 'next';
 import { useDispatch } from 'react-redux';
-import { setCartItems } from '../../store/cartSlice';
 import { supabase } from '$lib/supabase';
+import { setCartItems } from '$store/cartSlice';
 
 const CheckoutSuccessPage: NextPage = () => {
 	const user = supabase.auth.user();

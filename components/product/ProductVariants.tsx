@@ -1,8 +1,9 @@
-import { SelectedVariant } from '$lib/types/cart';
-import { Product } from '$lib/types/product';
-import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
-import ProductVariantItem from './ProductVariantItem';
+import { useRouter } from 'next/router';
+import type { SelectedVariant } from '$lib/types/cart';
+import type { Product } from '$lib/types/product';
+
+import ProductVariantItem from '@components/product/ProductVariantItem';
 
 const ProductVariants: React.FC<{
 	product: Product;

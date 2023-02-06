@@ -1,12 +1,13 @@
-import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../lib/hooks';
-import { getAllOrders, setOrders } from '../../store/orderSlice';
-import { supabase } from '$lib/supabase';
-import { Order } from '$lib/types/order';
-import { dateFormat } from '$lib/utils/dateFormat';
+import type { NextPage } from 'next';
 import Link from 'next/link';
-import Loader from '@components/misc/Loading';
+import { supabase } from '$lib/supabase';
+import { useAppDispatch, useAppSelector } from '$lib/hooks';
+import { dateFormat } from '$lib/utils/dateFormat';
+import type { Order } from '$lib/types/order';
+import { getAllOrders, setOrders } from '$store/orderSlice';
+
+import Loader from '@ui/Loading';
 
 const OrdersPage: NextPage = () => {
 	const user = supabase.auth.user();

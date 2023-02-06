@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '.';
-import { Order } from '$lib/types/order';
+import type { Order } from '$lib/types/order';
+import type { RootState } from '$store';
 
 interface InitialState {
 	orders: Order[];

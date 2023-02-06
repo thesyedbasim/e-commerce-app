@@ -1,7 +1,5 @@
 import Link from 'next/link';
-
 import { getFirstProductURL } from '$lib/utils/getProductURLSupabase';
-
 import type { ProductMinimal } from '$lib/types/product';
 
 const SearchProductItem: React.FC<{

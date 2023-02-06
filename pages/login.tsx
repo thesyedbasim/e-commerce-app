@@ -1,8 +1,8 @@
-import { User } from '@supabase/supabase-js';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '$lib/supabase';
 
 const Login: NextPage = () => {

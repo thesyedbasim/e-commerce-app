@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-
 import { initStripe } from '$lib/stripe';
 import { getServiceSupabase } from '$lib/supabase';
 import type { Cart } from '$lib/types/cart';

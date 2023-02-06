@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Category } from '$lib/types/category';
+import type { Category } from '$lib/types/category';
 
 const CategoryItem: React.FC<{ category: Category }> = ({ category }) => {
 	return (

@@ -1,9 +1,9 @@
-import { Product } from '$lib/types/product';
+import { useQuery } from '@tanstack/react-query';
 import {
 	getAllProductsURL,
 	getFirstProductURL
 } from '$lib/utils/getProductURLSupabase';
-import { useQuery } from '@tanstack/react-query';
+import type { Product } from '$lib/types/product';
 
 const ProductImages: React.FC<{ product: Product }> = ({ product }) => {
 	const { data: productsURLs } = useQuery(

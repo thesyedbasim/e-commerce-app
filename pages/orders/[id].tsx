@@ -1,11 +1,12 @@
-import { supabase } from '$lib/supabase';
-import { addOrder, getOrderById } from '$store/orderSlice';
-import { useAppDispatch, useAppSelector } from 'lib/hooks';
-import Loader from '@components/misc/Loading';
-import OrderProductItem from '@components/order/OrderProductItem';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { supabase } from '$lib/supabase';
+import { useAppDispatch, useAppSelector } from '$lib/hooks';
+import { addOrder, getOrderById } from '$store/orderSlice';
+
+import Loader from '@ui/Loading';
+import OrderProductItem from '@components/order/OrderProductItem';
 
 const OrderDetails: NextPage = () => {
 	const router = useRouter();

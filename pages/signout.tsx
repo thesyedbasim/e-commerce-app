@@ -1,7 +1,7 @@
-import { supabase } from '$lib/supabase';
+import { useEffect } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { supabase } from '$lib/supabase';
 
 const Signout: NextPage = () => {
 	const router = useRouter();

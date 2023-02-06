@@ -1,13 +1,14 @@
-import { supabase } from '$lib/supabase';
-import { Cart, SelectedVariant } from '$lib/types/cart';
-import { Product } from '$lib/types/product';
-import { addItemToCart } from '$store/cartSlice';
-import { useAppDispatch } from 'lib/hooks';
 import { useState } from 'react';
-import ProductReviews from './ProductReviews';
-import ProductVariants from './ProductVariants';
-import ProductWishlistButton from './ProductWishlistButton';
-import Button from '@components/ui/Button';
+import { supabase } from '$lib/supabase';
+import { useAppDispatch } from '$lib/hooks';
+import type { Product } from '$lib/types/product';
+import type { Cart, SelectedVariant } from '$lib/types/cart';
+import { addItemToCart } from '$store/cartSlice';
+
+import ProductReviews from '@components/product/ProductReviews';
+import ProductVariants from '@components/product/ProductVariants';
+import ProductWishlistButton from '@components/product/ProductWishlistButton';
+import Button from '@ui/Button';
 
 const ProductDetails: React.FC<{ product: Product }> = ({ product }) => {
 	const dispatch = useAppDispatch();

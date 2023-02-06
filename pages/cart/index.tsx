@@ -1,16 +1,17 @@
-import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../lib/hooks';
+import type { NextPage } from 'next';
+import { useAppDispatch, useAppSelector } from '$lib/hooks';
+import { supabase } from '$lib/supabase';
+import type { Cart } from '$lib/types/cart';
 import {
 	getCartItemsFetchStatus,
 	getNumOfItemsInCart,
 	setCartItems,
 	setCartItemsFetchStatus
-} from '../../store/cartSlice';
-import { supabase } from '$lib/supabase';
-import { Cart } from '$lib/types/cart';
-import Loader from '@components/misc/Loading';
+} from '$store/cartSlice';
+
 import CartView from '@components/cart/CartView';
+import Loader from '@ui/Loading';
 
 const Cart: NextPage = () => {
 	const dispatch = useAppDispatch();

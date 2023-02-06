@@ -1,19 +1,20 @@
-import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { supabase } from '$lib/supabase';
-import axios, { AxiosError } from 'axios';
+import type { NextPage } from 'next';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import CheckoutForm from '../../components/checkout/CheckoutForm';
-import { useAppDispatch, useAppSelector } from 'lib/hooks';
+import { useQuery } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
+import { supabase } from '$lib/supabase';
+import { useAppDispatch, useAppSelector } from '$lib/hooks';
+import type { Cart } from '$lib/types/cart';
 import {
 	getAllCartItems,
 	setCartItems,
 	setCartItemsFetchStatus
 } from '$store/cartSlice';
-import { Cart } from '$lib/types/cart';
+
+import CheckoutForm from '@components/checkout/CheckoutForm';
 import CartItemCheckout from '@components/checkout/CartItemCheckout';
-import { useQuery } from '@tanstack/react-query';
 
 const stripePromise = loadStripe(
 	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!

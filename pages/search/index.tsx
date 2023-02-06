@@ -1,8 +1,9 @@
+import type { GetServerSideProps, NextPage } from 'next';
 import { supabase } from '$lib/supabase';
-import { ProductMinimal } from '$lib/types/product';
+import type { ProductMinimal } from '$lib/types/product';
+
 import SearchView from '@components/search/SearchView';
 import SearchSidebar from '@components/search/SearchSidebar';
-import type { GetServerSideProps, NextPage } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 	const searchQuery = query.q;

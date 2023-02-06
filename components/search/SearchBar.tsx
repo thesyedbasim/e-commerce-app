@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const SearchBar: React.FC = () => {
 	const router = useRouter();

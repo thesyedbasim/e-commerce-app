@@ -1,5 +1,5 @@
-import { User } from '$lib/types/user';
 import { getServiceSupabase } from '$lib/supabase';
+import type { User } from '$lib/types/user';
 
 const supabaseService = getServiceSupabase();
 

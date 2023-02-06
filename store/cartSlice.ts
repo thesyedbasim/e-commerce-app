@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '.';
-import { Cart } from '$lib/types/cart';
+import type { Cart } from '$lib/types/cart';
+import { RootState } from '$store';
 
 interface InitialState {
 	error?: string;

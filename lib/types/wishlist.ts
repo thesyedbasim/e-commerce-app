@@ -1,5 +1,5 @@
 import { User } from '@supabase/supabase-js';
-import { Product, ProductMinimal } from './product';
+import type { Product, ProductMinimal } from '$lib/types/product';
 
 export interface Wishlist {
 	id: string;

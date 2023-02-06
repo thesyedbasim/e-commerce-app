@@ -1,5 +1,5 @@
-import { Cart } from './cart';
-import { Product } from './product';
+import type { Cart } from '$lib/types/cart';
+import type { Product } from '$lib/types/product';
 
 export type OrderStatus =
 	| 'PAYMENT_PENDING'

@@ -1,4 +1,4 @@
-import { ProductMinimal } from './product';
+import type { ProductMinimal } from '$lib/types/product';
 
 export interface SelectedVariant {
 	readonly name: string;
