@@ -1,5 +1,5 @@
 import { supabase } from '$lib/supabase';
-import { Product } from '$lib/types/product';
+import type { Product } from '$lib/types/product';
 
 export function getFirstProductURL(productId: Product['id']) {
 	const { data, error } = supabase.storage

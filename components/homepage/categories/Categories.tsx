@@ -1,5 +1,6 @@
-import { Category } from '$lib/types/category';
-import CategoryItem from './CategoryItem';
+import type { Category } from '$lib/types/category';
+
+import CategoryItem from '@components/homepage/categories/CategoryItem';
 
 const Categories: React.FC<{ categories: Category[] }> = ({ categories }) => {
 	return (

@@ -1,9 +1,9 @@
-import { Product, ProductVariant } from '$lib/types/product';
-import { NextRouter, useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
+import type { ProductVariant } from '$lib/types/product';
 
 type ProductVariantOption = ProductVariant['options'][0];
-type ProductVariantOptionsSize = ProductVariant['optionsSize'];
 
 interface ProductVariantProps {
 	router: NextRouter;

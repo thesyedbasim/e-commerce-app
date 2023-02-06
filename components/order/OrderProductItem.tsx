@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getFirstProductURL } from '$lib/utils/getProductURLSupabase';
-import { Order } from '$lib/types/order';
+import type { Order } from '$lib/types/order';
 
 const OrderProductItem: React.FC<{ product: Order['products'][0] }> = ({
 	product

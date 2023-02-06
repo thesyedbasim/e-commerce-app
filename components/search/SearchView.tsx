@@ -1,6 +1,7 @@
-import { ProductMinimal } from '$lib/types/product';
 import { useRouter } from 'next/router';
-import ProductSearchItem from './SearchProductItem';
+import type { ProductMinimal } from '$lib/types/product';
+
+import ProductSearchItem from '@components/search/SearchProductItem';
 
 const SearchView: React.FC<{ products: ProductMinimal[] }> = ({ products }) => {
 	const router = useRouter();

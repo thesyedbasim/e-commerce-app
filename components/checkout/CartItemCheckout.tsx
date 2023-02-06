@@ -1,13 +1,11 @@
-import Link from 'next/link';
-import { supabase } from '$lib/supabase';
-import { Cart } from '$lib/types/cart';
-import { removeItemFromCart, updateCartItemQuantity } from '$store/cartSlice';
-import { useAppDispatch } from 'lib/hooks';
-import { debounce } from 'lodash';
-import { useCallback } from 'react';
-import CrossIcon from '../icons/Cross';
 import { UrlObject } from 'url';
+import { useCallback } from 'react';
+import { debounce } from 'lodash';
+import { supabase } from '$lib/supabase';
+import { useAppDispatch } from '$lib/hooks';
 import { getFirstProductURL } from '$lib/utils/getProductURLSupabase';
+import type { Cart } from '$lib/types/cart';
+import { removeItemFromCart, updateCartItemQuantity } from '$store/cartSlice';
 
 const CartItemCheckout: React.FC<{
 	cartItem: Cart;

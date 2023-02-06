@@ -1,11 +1,9 @@
 import { useRouter } from 'next/router';
+import { useAppSelector } from '$lib/hooks';
 import { getAllCartItems, getTotalCartPrice } from '$store/cartSlice';
 
-import { useAppDispatch, useAppSelector } from 'lib/hooks';
-import Link from 'next/link';
-
-import CartItem from './CartItem';
-import Button from '@components/ui/Button';
+import Button from '@ui/Button';
+import CartItem from '@components/cart/CartItem';
 
 const CartView: React.FC<{
 	setIsLoading: Function;

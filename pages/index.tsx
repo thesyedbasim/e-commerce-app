@@ -1,9 +1,10 @@
 import type { GetStaticProps, NextPage } from 'next';
+import { supabase } from '$lib/supabase';
+import type { ProductMinimal } from '$lib/types/product';
+import type { Category } from '$lib/types/category';
+
 import Categories from '@components/homepage/categories/Categories';
 import NewArrivalsSection from '@components/homepage/NewArrivalsSection';
-import { supabase } from '$lib/supabase';
-import { ProductMinimal } from '$lib/types/product';
-import { Category } from '$lib/types/category';
 
 export const getStaticProps: GetStaticProps = async () => {
 	const getCategories = async () => {

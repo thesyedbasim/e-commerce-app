@@ -1,12 +1,12 @@
+import styles from './Nav.module.scss';
 import Link from 'next/link';
 import classNames from 'classnames';
-import styles from './Nav.module.scss';
 
 import SearchBar from '@components/search/SearchBar';
+import OrderIcon from '@icons/Order';
 import CartIcon from '@icons/Cart';
 import ProfileIcon from '@icons/Profile';
 import WishlistIcon from '@icons/Wishlist';
-import OrderIcon from '@components/icons/Order';
 
 const NavDesktop: React.FC<{
 	numOfItemsInCart: number;

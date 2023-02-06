@@ -4,7 +4,8 @@ import {
 	useElements,
 	PaymentElement
 } from '@stripe/react-stripe-js';
-import Button from '@components/ui/Button';
+
+import Button from '@ui/Button';
 
 const CheckoutForm: React.FC = () => {
 	const stripe = useStripe();

@@ -1,14 +1,14 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
-import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
+import type { NextPage, GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { supabase } from '$lib/supabase';
-import { useAppDispatch, useAppSelector } from '../../lib/hooks';
+import { useAppDispatch, useAppSelector } from '$lib/hooks';
 import {
 	addReview,
 	getAllReviewsOfProduct,
 	setReviews
-} from '../../store/reviewSlice';
-import { useRouter } from 'next/router';
+} from '$store/reviewSlice';
+
 import ProductImages from '@components/product/ProductImages';
 import ProductDetails from '@components/product/ProductDetails';
 

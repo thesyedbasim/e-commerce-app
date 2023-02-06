@@ -1,14 +1,12 @@
 import { useEffect } from 'react';
 import type { NextPage } from 'next';
-
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '$lib/supabase';
-import { useAppDispatch, useAppSelector } from 'lib/hooks';
-
-import { getWishlist, setWishlist } from '$store/wishlistSlice';
+import { useAppDispatch, useAppSelector } from '$lib/hooks';
 import type { Wishlist } from '$lib/types/wishlist';
+import { getWishlist, setWishlist } from '$store/wishlistSlice';
 
-import Loader from '@components/misc/Loading';
+import Loader from '@ui/Loading';
 import WishlistItem from '@components/wishlist/WishlistItem';
 
 const fetchUserWishlist = async () => {

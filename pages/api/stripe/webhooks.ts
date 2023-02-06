@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import { buffer } from 'micro';
-import axios from 'axios';
 import { createOrder } from './orders';
 
 export const config = { api: { bodyParser: false } };

@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '$lib/supabase';
-import { Cart } from '$lib/types/cart';
+import { useAppDispatch, useAppSelector } from '$lib/hooks';
+import type { Cart } from '$lib/types/cart';
 import {
 	getCartItemsFetchStatus,
 	getNumOfItemsInCart,
 	setCartItems,
 	setCartItemsFetchStatus
 } from '$store/cartSlice';
-import { useAppDispatch, useAppSelector } from 'lib/hooks';
-import NavDesktop from './NavDesktop';
-import NavMobile from './NavMobile';
+
+import NavDesktop from '@components/layout/nav/NavDesktop';
+import NavMobile from '@components/layout/nav/NavMobile';
 
 const Navbar: React.FC = () => {
 	const dispatch = useAppDispatch();
